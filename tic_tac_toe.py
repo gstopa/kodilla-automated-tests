@@ -1,196 +1,114 @@
 """
 
-# No wins
-# Empty board
->>> tic_tac_toe_winner(board_state='         ')
+>>> import sys; sys.tracebacklimit = 0
+>>> def run_test_cases(test_cases):
+...     for board, expectation in test_cases.items():
+...         response = tic_tac_toe_winner(board)
+...         assert response == expectation, f"Expected {expectation!r} for {board!r} got {response!r}"
 
-# Long no wins
->>> tic_tac_toe_winner(board_state='xoxooxxxo')
->>> tic_tac_toe_winner(board_state='xoxxoxoxo')
-
-# 5 moves no wins
->>> tic_tac_toe_winner(board_state='x x o x o')
->>> tic_tac_toe_winner(board_state='o x oxx  ')
+>>> test_cases_no_wins = {
+...     '         ': None,
+...     'XOXOOXXXO': None,
+...     'XOXXOXOXO': None,
+...     'X X O X O': None,
+...     'O X OXX  ': None,
+... }
+>>> run_test_cases(test_cases_no_wins)
 
 # Unrealistic scenarios that can be interpreted as X or O win
 # So most probably those should be some exceptions
->>> tic_tac_toe_winner(board_state='xxx      ')
-'X'
->>> tic_tac_toe_winner(board_state='   xxx   ')
-'X'
->>> tic_tac_toe_winner(board_state='      xxx')
-'X'
->>> tic_tac_toe_winner(board_state='ooo      ')
-'O'
->>> tic_tac_toe_winner(board_state='   ooo   ')
-'O'
->>> tic_tac_toe_winner(board_state='      ooo')
-'O'
->>> tic_tac_toe_winner(board_state='x  x  x  ')
-'X'
->>> tic_tac_toe_winner(board_state=' x  x  x ')
-'X'
->>> tic_tac_toe_winner(board_state='  x  x  x')
-'X'
->>> tic_tac_toe_winner(board_state='o  o  o  ')
-'O'
->>> tic_tac_toe_winner(board_state=' o  o  o ')
-'O'
->>> tic_tac_toe_winner(board_state='  o  o  o')
-'O'
->>> tic_tac_toe_winner(board_state='x   x   x')
-'X'
->>> tic_tac_toe_winner(board_state='  x x x  ')
-'X'
->>> tic_tac_toe_winner(board_state='o   o   o')
-'O'
->>> tic_tac_toe_winner(board_state='  o o o  ')
-'O'
+>>> test_cases_unrealistic_wins = {
+...     'XXX      ': 'X',
+...     '   XXX   ': 'X',
+...     '      XXX': 'X',
+...     'X  X  X  ': 'X',
+...     ' X  X  X ': 'X',
+...     '  X  X  X': 'X',
+...     'X   X   X': 'X',
+...     '  X X X  ': 'X',
+...     'OOO      ': 'O',
+...     '   OOO   ': 'O',
+...     '      OOO': 'O',
+...     'O  O  O  ': 'O',
+...     ' O  O  O ': 'O',
+...     '  O  O  O': 'O',
+...     'O   O   O': 'O',
+...     '  O O O  ': 'O',
+... }
+>>> run_test_cases(test_cases_unrealistic_wins)
 
-# Realistic short wins
-# Xes row wins
->>> tic_tac_toe_winner(board_state='xxxoo    ')
-'X'
->>> tic_tac_toe_winner(board_state='oo xxx   ')
-'X'
->>> tic_tac_toe_winner(board_state='oo    xxx')
-'X'
 
-# Oes row wins
->>> tic_tac_toe_winner(board_state='oooxx x  ')
-'O'
->>> tic_tac_toe_winner(board_state='xx ooox  ')
-'O'
->>> tic_tac_toe_winner(board_state='xx x  ooo')
-'O'
+>>> test_cases_realistic_short_wins = {
+...     'XXXOO    ': 'X',
+...     'OO XXX   ': 'X',
+...     'OO    XXX': 'X',
+...     'XOOX  X  ': 'X',
+...     ' X  X OXO': 'X',
+...     'OOX  X  X': 'X',
+...     'XOO X   X': 'X',
+...     'OOX X X  ': 'X',
+...     'OOOXX X  ': 'O',
+...     'XX OOOX  ': 'O',
+...     'XX X  OOO': 'O',
+...     'OXXOX O  ': 'O',
+...     'XOXXO  O ': 'O',
+...     'XXOX O  O': 'O',
+...     'OXXXO   O': 'O',
+...     'XXOXO O  ': 'O',
+... }
+>>> run_test_cases(test_cases_realistic_short_wins)
 
-# Xes column wins
->>> tic_tac_toe_winner(board_state='xoox  x  ')
-'X'
->>> tic_tac_toe_winner(board_state=' x  x oxo')
-'X'
->>> tic_tac_toe_winner(board_state='oox  x  x')
-'X'
 
-# Oes column wins
->>> tic_tac_toe_winner(board_state='oxxox o  ')
-'O'
->>> tic_tac_toe_winner(board_state='xoxxo  o ')
-'O'
->>> tic_tac_toe_winner(board_state='xxox o  o')
-'O'
-
-# Xes diagonal wins
->>> tic_tac_toe_winner(board_state='xoo x   x')
-'X'
->>> tic_tac_toe_winner(board_state='oox x x  ')
-'X'
-
-# Oes diagonal wins
->>> tic_tac_toe_winner(board_state='oxxxo   o')
-'O'
->>> tic_tac_toe_winner(board_state='xxoxo o  ')
-'O'
-
-# Realistic long single wins
-# Xes row wins
->>> tic_tac_toe_winner(board_state='xxxxoooxo')
-'X'
->>> tic_tac_toe_winner(board_state='xxxxoooox')
-'X'
->>> tic_tac_toe_winner(board_state='xxxoxoxoo')
-'X'
->>> tic_tac_toe_winner(board_state='xxxoxooox')
-'X'
->>> tic_tac_toe_winner(board_state='xxxooxxoo')
-'X'
->>> tic_tac_toe_winner(board_state='xxxooxoxo')
-'X'
->>> tic_tac_toe_winner(board_state='xooxxxoxo')
-'X'
->>> tic_tac_toe_winner(board_state='oxoxxxxoo')
-'X'
->>> tic_tac_toe_winner(board_state='oxoxxxoox')
-'X'
->>> tic_tac_toe_winner(board_state='ooxxxxoxo')
-'X'
->>> tic_tac_toe_winner(board_state='xoooxoxxx')
-'X'
->>> tic_tac_toe_winner(board_state='xooooxxxx')
-'X'
->>> tic_tac_toe_winner(board_state='oxoxooxxx')
-'X'
->>> tic_tac_toe_winner(board_state='oxoooxxxx')
-'X'
->>> tic_tac_toe_winner(board_state='ooxxooxxx')
-'X'
->>> tic_tac_toe_winner(board_state='ooxoxoxxx')
-'X'
-
-# Xes column wins
->>> tic_tac_toe_winner(board_state='xxoxooxox')
-'X'
->>> tic_tac_toe_winner(board_state='xxoxoxxoo')
-'X'
->>> tic_tac_toe_winner(board_state='xoxxooxxo')
-'X'
->>> tic_tac_toe_winner(board_state='xooxoxxxo')
-'X'
->>> tic_tac_toe_winner(board_state='oxxxxooxo')
-'X'
->>> tic_tac_toe_winner(board_state='xxooxxoxo')
-'X'
->>> tic_tac_toe_winner(board_state='oxooxxxxo')
-'X'
->>> tic_tac_toe_winner(board_state='oxoxxooxx')
-'X'
->>> tic_tac_toe_winner(board_state='xoxooxoxx')
-'X'
->>> tic_tac_toe_winner(board_state='ooxxoxoxx')
-'X'
->>> tic_tac_toe_winner(board_state='oxxxoxoox')
-'X'
->>> tic_tac_toe_winner(board_state='oxxooxxox')
-'X'
-
-# Oes row wins
->>> tic_tac_toe_winner(board_state='ooo xxxox')
-'O'
->>> tic_tac_toe_winner(board_state=' xxoooxox')
-'O'
->>> tic_tac_toe_winner(board_state=' xxxoxooo')
-'O'
-
-# Oes column wins
->>> tic_tac_toe_winner(board_state='oxxoo oxx')
-'O'
->>> tic_tac_toe_winner(board_state='xoxoo xox')
-'O'
->>> tic_tac_toe_winner(board_state='xxo ooxxo')
-'O'
-
-# Xes diagonal wins
->>> tic_tac_toe_winner(board_state='xxooxoxox')
-'X'
->>> tic_tac_toe_winner(board_state='xoxoxoxxo')
-'X'
-
-# Oes diagonal wins
->>> tic_tac_toe_winner(board_state='oxo oxxxo')
-'O'
->>> tic_tac_toe_winner(board_state='oxo oxoxx')
-'O'
-
+>>> test_cases_realistic_long_single_wins = {
+...     'XXXXOOOXO': 'X',
+...     'XXXXOOOOX': 'X',
+...     'XXXOXOXOO': 'X',
+...     'XXXOXOOOX': 'X',
+...     'XXXOOXXOO': 'X',
+...     'XXXOOXOXO': 'X',
+...     'XOOXXXOXO': 'X',
+...     'OXOXXXXOO': 'X',
+...     'OXOXXXOOX': 'X',
+...     'OOXXXXOXO': 'X',
+...     'XOOOXOXXX': 'X',
+...     'XOOOOXXXX': 'X',
+...     'OXOXOOXXX': 'X',
+...     'OXOOOXXXX': 'X',
+...     'OOXXOOXXX': 'X',
+...     'XXOXOOXOX': 'X',
+...     'XXOXOXXOO': 'X',
+...     'XOXXOOXXO': 'X',
+...     'XOOXOXXXO': 'X',
+...     'OXXXXOOXO': 'X',
+...     'XXOOXXOXO': 'X',
+...     'OXOOXXXXO': 'X',
+...     'OXOXXOOXX': 'X',
+...     'XOXOOXOXX': 'X',
+...     'OOXXOXOXX': 'X',
+...     'OXXXOXOOX': 'X',
+...     'OXXOOXXOX': 'X',
+...     'XXOOXOXOX': 'X',
+...     'XOXOXOXXO': 'X',
+...     'OOO XXXOX': 'O',
+...     ' XXOOOXOX': 'O',
+...     ' XXXOXOOO': 'O',
+...     'OXXOO OXX': 'O',
+...     'XOXOO XOX': 'O',
+...     'XXO OOXXO': 'O',
+...     'OXO OXXXO': 'O',
+...     'OXO OXOXX': 'O',
+... }
+>>> run_test_cases(test_cases_realistic_long_single_wins)
 
 """
 
 from typing import Optional, Set
 
 
-def tic_tac_toe_winner(board_state: str) -> Optional[str]:
+def tic_tac_toe_winner(board: str) -> Optional[str]:
     """
 
-    :param board_state:
+    :param board:
         9 element string of 'x', 'o', and ' ' (space) representation of game board;
         first 3 elements are the first row,
         second 3 elements are the second row,
@@ -207,23 +125,23 @@ def tic_tac_toe_winner(board_state: str) -> Optional[str]:
             a_winner: str = counter.pop()
             if a_winner == ' ':
                 return None
-            return a_winner.upper()
+            return a_winner
         return None
 
-    if winner := get_winner(board_state[0:3]):
+    if winner := get_winner(board[0:3]):
         return winner
-    if winner := get_winner(board_state[3:6]):
+    if winner := get_winner(board[3:6]):
         return winner
-    if winner := get_winner(board_state[6:9]):
+    if winner := get_winner(board[6:9]):
         return winner
-    if winner := get_winner(board_state[0::3]):
+    if winner := get_winner(board[0::3]):
         return winner
-    if winner := get_winner(board_state[1::3]):
+    if winner := get_winner(board[1::3]):
         return winner
-    if winner := get_winner(board_state[2::3]):
+    if winner := get_winner(board[2::3]):
         return winner
-    if winner := get_winner(board_state[0::4]):
+    if winner := get_winner(board[0::4]):
         return winner
-    if winner := get_winner(board_state[2:7:2]):
+    if winner := get_winner(board[2:7:2]):
         return winner
     return None
