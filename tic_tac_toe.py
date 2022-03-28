@@ -7,96 +7,314 @@
 ...         assert response == expectation, f"Expected {expectation!r} for {board!r} got {response!r}"
 
 >>> test_cases_no_wins = {
-...     '         ': None,
-...     'XOXOOXXXO': None,
-...     'XOXXOXOXO': None,
-...     'X X O X O': None,
-...     'O X OXX  ': None,
+...     '   '
+...     '   '
+...     '   ': None,
+...
+...     'XOX'
+...     'OOX'
+...     'XXO': None,
+...
+...     'XOX'
+...     'XOX'
+...     'OXO': None,
+...
+...     'X X'
+...     ' O '
+...     'X O': None,
+...
+...     'O X'
+...     ' OX'
+...     'X  ': None,
 ... }
 >>> run_test_cases(test_cases_no_wins)
 
 # Unrealistic scenarios that can be interpreted as X or O win
 # So most probably those should be some exceptions
 >>> test_cases_unrealistic_wins = {
-...     'XXX      ': 'X',
-...     '   XXX   ': 'X',
-...     '      XXX': 'X',
-...     'X  X  X  ': 'X',
-...     ' X  X  X ': 'X',
-...     '  X  X  X': 'X',
-...     'X   X   X': 'X',
-...     '  X X X  ': 'X',
-...     'OOO      ': 'O',
-...     '   OOO   ': 'O',
-...     '      OOO': 'O',
-...     'O  O  O  ': 'O',
-...     ' O  O  O ': 'O',
-...     '  O  O  O': 'O',
-...     'O   O   O': 'O',
-...     '  O O O  ': 'O',
+...     'XXX'
+...     '   '
+...     '   ': 'X',
+...
+...     '   '
+...     'XXX'
+...     '   ': 'X',
+...
+...     '   '
+...     '   '
+...     'XXX': 'X',
+...
+...     'X  '
+...     'X  '
+...     'X  ': 'X',
+...
+...     ' X '
+...     ' X '
+...     ' X ': 'X',
+...
+...     '  X'
+...     '  X'
+...     '  X': 'X',
+...
+...     'X  '
+...     ' X '
+...     '  X': 'X',
+...
+...     '  X'
+...     ' X '
+...     'X  ': 'X',
+...
+...     'OOO'
+...     '   '
+...     '   ': 'O',
+...
+...     '   '
+...     'OOO'
+...     '   ': 'O',
+...
+...     '   '
+...     '   '
+...     'OOO': 'O',
+...
+...     'O  '
+...     'O  '
+...     'O  ': 'O',
+...
+...     ' O '
+...     ' O '
+...     ' O ': 'O',
+...
+...     '  O'
+...     '  O'
+...     '  O': 'O',
+...
+...     'O  '
+...     ' O '
+...     '  O': 'O',
+...
+...     '  O'
+...     ' O '
+...     'O  ': 'O',
 ... }
 >>> run_test_cases(test_cases_unrealistic_wins)
 
 
 >>> test_cases_realistic_short_wins = {
-...     'XXXOO    ': 'X',
-...     'OO XXX   ': 'X',
-...     'OO    XXX': 'X',
-...     'XOOX  X  ': 'X',
-...     ' X  X OXO': 'X',
-...     'OOX  X  X': 'X',
-...     'XOO X   X': 'X',
-...     'OOX X X  ': 'X',
-...     'OOOXX X  ': 'O',
-...     'XX OOOX  ': 'O',
-...     'XX X  OOO': 'O',
-...     'OXXOX O  ': 'O',
-...     'XOXXO  O ': 'O',
-...     'XXOX O  O': 'O',
-...     'OXXXO   O': 'O',
-...     'XXOXO O  ': 'O',
+...     'XXX'
+...     'OO '
+...     '   ': 'X',
+...
+...     'OO '
+...     'XXX'
+...     '   ': 'X',
+...
+...     'OO '
+...     '   '
+...     'XXX': 'X',
+...
+...     'XOO'
+...     'X  '
+...     'X  ': 'X',
+...
+...     ' X '
+...     ' X '
+...     'OXO': 'X',
+...
+...     'OOX'
+...     '  X'
+...     '  X': 'X',
+...
+...     'XOO'
+...     ' X '
+...     '  X': 'X',
+...
+...     'OOX'
+...     ' X '
+...     'X  ': 'X',
+...
+...     'OOO'
+...     'XX '
+...     'X  ': 'O',
+...
+...     'XX '
+...     'OOO'
+...     'X  ': 'O',
+...
+...     'XX '
+...     'X  '
+...     'OOO': 'O',
+...
+...     'OXX'
+...     'OX '
+...     'O  ': 'O',
+...
+...     'XOX'
+...     'XO '
+...     ' O ': 'O',
+...
+...     'XXO'
+...     'X O'
+...     '  O': 'O',
+...
+...     'OXX'
+...     'XO '
+...     '  O': 'O',
+...
+...     'XXO'
+...     'XO '
+...     'O  ': 'O',
 ... }
 >>> run_test_cases(test_cases_realistic_short_wins)
 
 
 >>> test_cases_realistic_long_single_wins = {
-...     'XXXXOOOXO': 'X',
-...     'XXXXOOOOX': 'X',
-...     'XXXOXOXOO': 'X',
-...     'XXXOXOOOX': 'X',
-...     'XXXOOXXOO': 'X',
-...     'XXXOOXOXO': 'X',
-...     'XOOXXXOXO': 'X',
-...     'OXOXXXXOO': 'X',
-...     'OXOXXXOOX': 'X',
-...     'OOXXXXOXO': 'X',
-...     'XOOOXOXXX': 'X',
-...     'XOOOOXXXX': 'X',
-...     'OXOXOOXXX': 'X',
-...     'OXOOOXXXX': 'X',
-...     'OOXXOOXXX': 'X',
-...     'XXOXOOXOX': 'X',
-...     'XXOXOXXOO': 'X',
-...     'XOXXOOXXO': 'X',
-...     'XOOXOXXXO': 'X',
-...     'OXXXXOOXO': 'X',
-...     'XXOOXXOXO': 'X',
-...     'OXOOXXXXO': 'X',
-...     'OXOXXOOXX': 'X',
-...     'XOXOOXOXX': 'X',
-...     'OOXXOXOXX': 'X',
-...     'OXXXOXOOX': 'X',
-...     'OXXOOXXOX': 'X',
-...     'XXOOXOXOX': 'X',
-...     'XOXOXOXXO': 'X',
-...     'OOO XXXOX': 'O',
-...     ' XXOOOXOX': 'O',
-...     ' XXXOXOOO': 'O',
-...     'OXXOO OXX': 'O',
-...     'XOXOO XOX': 'O',
-...     'XXO OOXXO': 'O',
-...     'OXO OXXXO': 'O',
-...     'OXO OXOXX': 'O',
+...     'XXX'
+...     'XOO'
+...     'OXO': 'X',
+...
+...     'XXX'
+...     'XOO'
+...     'OOX': 'X',
+...
+...     'XXX'
+...     'OXO'
+...     'XOO': 'X',
+...
+...     'XXX'
+...     'OXO'
+...     'OOX': 'X',
+...
+...     'XXX'
+...     'OOX'
+...     'XOO': 'X',
+...
+...     'XXX'
+...     'OOX'
+...     'OXO': 'X',
+...
+...     'XOO'
+...     'XXX'
+...     'OXO': 'X',
+...
+...     'OXO'
+...     'XXX'
+...     'XOO': 'X',
+...
+...     'OXO'
+...     'XXX'
+...     'OOX': 'X',
+...
+...     'OOX'
+...     'XXX'
+...     'OXO': 'X',
+...
+...     'XOO'
+...     'OXO'
+...     'XXX': 'X',
+...
+...     'XOO'
+...     'OOX'
+...     'XXX': 'X',
+...
+...     'OXO'
+...     'XOO'
+...     'XXX': 'X',
+...
+...     'OXO'
+...     'OOX'
+...     'XXX': 'X',
+...
+...     'OOX'
+...     'XOO'
+...     'XXX': 'X',
+...
+...     'XXO'
+...     'XOO'
+...     'XOX': 'X',
+...
+...     'XXO'
+...     'XOX'
+...     'XOO': 'X',
+...
+...     'XOX'
+...     'XOO'
+...     'XXO': 'X',
+...
+...     'XOO'
+...     'XOX'
+...     'XXO': 'X',
+...
+...     'OXX'
+...     'XXO'
+...     'OXO': 'X',
+...
+...     'XXO'
+...     'OXX'
+...     'OXO': 'X',
+...
+...     'OXO'
+...     'OXX'
+...     'XXO': 'X',
+...
+...     'OXO'
+...     'XXO'
+...     'OXX': 'X',
+...
+...     'XOX'
+...     'OOX'
+...     'OXX': 'X',
+...
+...     'OOX'
+...     'XOX'
+...     'OXX': 'X',
+...
+...     'OXX'
+...     'XOX'
+...     'OOX': 'X',
+...
+...     'OXX'
+...     'OOX'
+...     'XOX': 'X',
+...
+...     'XXO'
+...     'OXO'
+...     'XOX': 'X',
+...
+...     'XOX'
+...     'OXO'
+...     'XXO': 'X',
+...
+...     'OOO'
+...     ' XX'
+...     'XOX': 'O',
+...
+...     ' XX'
+...     'OOO'
+...     'XOX': 'O',
+...
+...     ' XX'
+...     'XOX'
+...     'OOO': 'O',
+...
+...     'OXX'
+...     'OO '
+...     'OXX': 'O',
+...
+...     'XOX'
+...     'OO '
+...     'XOX': 'O',
+...
+...     'XXO'
+...     ' OO'
+...     'XXO': 'O',
+...
+...     'OXO'
+...     ' OX'
+...     'XXO': 'O',
+...
+...     'OXO'
+...     ' OX'
+...     'OXX': 'O',
 ... }
 >>> run_test_cases(test_cases_realistic_long_single_wins)
 
