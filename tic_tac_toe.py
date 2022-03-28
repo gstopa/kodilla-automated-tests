@@ -395,8 +395,6 @@ def tic_tac_toe_winner(board: str) -> Optional[str]:
         counter: Set[str] = set(x)
         if len(counter) == 1:
             a_winner: str = counter.pop()
-            if a_winner == ' ':
-                return None
             return a_winner
         return None
 
@@ -411,15 +409,19 @@ def tic_tac_toe_winner(board: str) -> Optional[str]:
             f"got {board.count('X')} X(es) and {board.count('O')} O(es)!"
         )
 
+    slices = {
+        "row1": slice(0, 3, 1),
+        "row2": slice(3, 6, 1),
+        "row3": slice(6, 9, 1),
+        "column1": slice(0, 9, 3),
+        "column2": slice(1, 9, 3),
+        "column3": slice(2, 9, 3),
+        "diagonal_nw_se": slice(0, 9, 4),
+        "diagonal_ne_sw": slice(2, 7, 2),
+    }
     winner_possibilities = [
-        get_winner(board[0:3]),  # row 1
-        get_winner(board[3:6]),  # row 2
-        get_winner(board[6:9]),  # row 3
-        get_winner(board[0::3]),  # column 1
-        get_winner(board[1::3]),  # column 2
-        get_winner(board[2::3]),  # column 3
-        get_winner(board[0::4]),  # diagonal NW-SE
-        get_winner(board[2:7:2]),  # diagonal NE-SW
+        get_winner(board[a_slice])
+        for a_slice in slices.values()
     ]
     x_wins = True if 'X' in winner_possibilities else False
     o_wins = True if 'O' in winner_possibilities else False
