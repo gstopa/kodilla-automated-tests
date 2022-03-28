@@ -1,10 +1,15 @@
 """
 
 >>> import sys; sys.tracebacklimit = 0
+>>> import pytest
 >>> def run_test_cases(test_cases):
 ...     for board, expectation in test_cases.items():
 ...         response = tic_tac_toe_winner(board)
 ...         assert response == expectation, f"Expected {expectation!r} for {board!r} got {response!r}"
+>>> def run_invalid_test_cases(test_cases):
+...     for board, expectation in test_cases.items():
+...         with pytest.raises(expectation):
+...             response = tic_tac_toe_winner(board)
 
 >>> test_cases_no_wins = {
 ...     '   '
@@ -29,74 +34,108 @@
 ... }
 >>> run_test_cases(test_cases_no_wins)
 
-# Unrealistic scenarios that can be interpreted as X or O win
-# So most probably those should be some exceptions
->>> test_cases_unrealistic_wins = {
+>>> test_cases_invalid = {
+...     '': ValueError,
+...     ' '*8: ValueError,
+...     ' '*10: ValueError,
+...
+...     ' a '
+...     '   '
+...     '   ': ValueError,
+...
+...     'x  '
+...     '   '
+...     '   ': ValueError,
+...
+...     '  o'
+...     '   '
+...     '   ': ValueError,
+...
+...     '   '
+...     ' 1 '
+...     '   ': ValueError,
+...
+...     '   '
+...     '   '
+...     '  0': ValueError,
+...
+...     'XXX'
+...     'XXX'
+...     'XXX': ValueError,
+...
+...     'OOO'
+...     'OOO'
+...     'OOO': ValueError,
+...
 ...     'XXX'
 ...     '   '
-...     '   ': 'X',
+...     '   ': ValueError,
 ...
 ...     '   '
 ...     'XXX'
-...     '   ': 'X',
+...     '   ': ValueError,
 ...
 ...     '   '
 ...     '   '
-...     'XXX': 'X',
+...     'XXX': ValueError,
 ...
 ...     'X  '
 ...     'X  '
-...     'X  ': 'X',
+...     'X  ': ValueError,
 ...
 ...     ' X '
 ...     ' X '
-...     ' X ': 'X',
+...     ' X ': ValueError,
 ...
 ...     '  X'
 ...     '  X'
-...     '  X': 'X',
+...     '  X': ValueError,
 ...
 ...     'X  '
 ...     ' X '
-...     '  X': 'X',
+...     '  X': ValueError,
 ...
 ...     '  X'
 ...     ' X '
-...     'X  ': 'X',
+...     'X  ': ValueError,
 ...
 ...     'OOO'
 ...     '   '
-...     '   ': 'O',
+...     '   ': ValueError,
 ...
 ...     '   '
 ...     'OOO'
-...     '   ': 'O',
+...     '   ': ValueError,
 ...
 ...     '   '
 ...     '   '
-...     'OOO': 'O',
+...     'OOO': ValueError,
 ...
 ...     'O  '
 ...     'O  '
-...     'O  ': 'O',
+...     'O  ': ValueError,
 ...
 ...     ' O '
 ...     ' O '
-...     ' O ': 'O',
+...     ' O ': ValueError,
 ...
 ...     '  O'
 ...     '  O'
-...     '  O': 'O',
+...     '  O': ValueError,
 ...
 ...     'O  '
 ...     ' O '
-...     '  O': 'O',
+...     '  O': ValueError,
 ...
 ...     '  O'
 ...     ' O '
-...     'O  ': 'O',
+...     'O  ': ValueError,
+...
+...     'XXX'
+...     'OOO'
+...     '   ': ValueError,
 ... }
->>> run_test_cases(test_cases_unrealistic_wins)
+>>> run_invalid_test_cases(test_cases_invalid)
 
 
 >>> test_cases_realistic_short_wins = {
@@ -337,6 +376,21 @@ def tic_tac_toe_winner(board: str) -> Optional[str]:
         'O' when oes won,
         None when neither won
     """
+    def is_correct_length(board: str) -> bool:
+        return len(board) == 9
+
+    def is_correct_characters(board: str) -> bool:
+        possible_characters = {' ', 'X', 'O'}
+        return set(board) | possible_characters == possible_characters
+
+    def is_correct_number_of_xes_and_oes(board: str) -> bool:
+        number_of_xes = board.count('X')
+        number_of_oes = board.count('O')
+        if (number_of_xes - number_of_oes == 0
+                or number_of_xes - number_of_oes == 1):
+            return True
+        return False
+
     def get_winner(x: str) -> Optional[str]:
         counter: Set[str] = set(x)
         if len(counter) == 1:
@@ -346,20 +400,33 @@ def tic_tac_toe_winner(board: str) -> Optional[str]:
             return a_winner
         return None
 
-    if winner := get_winner(board[0:3]):
-        return winner
-    if winner := get_winner(board[3:6]):
-        return winner
-    if winner := get_winner(board[6:9]):
-        return winner
-    if winner := get_winner(board[0::3]):
-        return winner
-    if winner := get_winner(board[1::3]):
-        return winner
-    if winner := get_winner(board[2::3]):
-        return winner
-    if winner := get_winner(board[0::4]):
-        return winner
-    if winner := get_winner(board[2:7:2]):
-        return winner
+    if not is_correct_length(board):
+        raise ValueError(f"Invalid length!\nExpected 9 elements; got {len(board)}!")
+    if not is_correct_characters(board):
+        raise ValueError(f"Invalid characters found!\nExpected only ' ', 'X', 'O'; got '{board}'!")
+    if not is_correct_number_of_xes_and_oes(board):
+        raise ValueError(
+            "Invalid number of Xes and Oes!\n"
+            "Expected that there are the same number of both or one more 'X'; "
+            f"got {board.count('X')} X(es) and {board.count('O')} O(es)!"
+        )
+
+    winner_possibilities = [
+        get_winner(board[0:3]),  # row 1
+        get_winner(board[3:6]),  # row 2
+        get_winner(board[6:9]),  # row 3
+        get_winner(board[0::3]),  # column 1
+        get_winner(board[1::3]),  # column 2
+        get_winner(board[2::3]),  # column 3
+        get_winner(board[0::4]),  # diagonal NW-SE
+        get_winner(board[2:7:2]),  # diagonal NE-SW
+    ]
+    x_wins = True if 'X' in winner_possibilities else False
+    o_wins = True if 'O' in winner_possibilities else False
+    if x_wins and o_wins:
+        raise ValueError(f"Invalid board!\nExpected Xes or Oes to win; got both wins '{board}'!")
+    if x_wins:
+        return 'X'
+    if o_wins:
+        return 'O'
     return None
