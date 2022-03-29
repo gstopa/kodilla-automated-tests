@@ -4,10 +4,21 @@
 ...     for case, expectation in test_cases.items():
 ...         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
+>>> none_is_not_a_palindrome = {
+...     None: False,
+... }
+>>> run_tests(none_is_not_a_palindrome)
+
 >>> empty_input = {
 ...     "": True,
+...     b"": True,
+...     tuple(): True,
 ... }
 >>> run_tests(empty_input)
+>>> case, expectation = [], True
+>>> assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
+>>> case, expectation = bytearray(), True
+>>> assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
 >>> string_single_word_palindromes = {
 ...     # all lower case
