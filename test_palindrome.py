@@ -22,23 +22,14 @@ def test_empty_input_is_a_palindrome() -> None:
 def test_string_single_word_palindromes() -> None:
     test_cases = {
         # all lower case
-        "abba": True,
-        "anilina": True,
-        "radar": True,
-        "xanax": True,
-        "towot": True,
+        "abba": True,  # even length
+        "towot": True,  # odd length
         # all upper case
-        "ABBA": True,
-        "ANILINA": True,
-        "RADAR": True,
-        "XANAX": True,
-        "TOWOT": True,
+        "ABBA": True,  # even length
+        "TOWOT": True,  # odd length
         # mixed case
-        "Abba": True,
-        "Anilina": True,
-        "Radar": True,
-        "Xanax": True,
-        "TowOt": True,
+        "Abba": True,  # even length
+        "TowOt": True,  # odd length
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
@@ -47,58 +38,25 @@ def test_string_single_word_palindromes() -> None:
 def test_string_single_word_non_palindromes() -> None:
     test_cases = {
         # all lower case
-        "aabba": False,
-        "qanilina": False,
-        "raadar": False,
-        "xaxnax": False,
-        "tawot": False,
+        "intel": False,  # odd length
+        "spacje": False,  # even length
         # all upper case
-        "AABBA": False,
-        "QANILINA": False,
-        "RAADAR": False,
-        "XAXNAX": False,
-        "TAWOT": False,
+        "INTEL": False,  # odd length
+        "SPACJE": False,  # even length
         # mixed case
-        "Aabba": False,
-        "QAnilina": False,
-        "RaAdar": False,
-        "XaXnax": False,
-        "TAwOt": False,
+        "Intel": False,  # odd length
+        "Spacje": False,  # even length
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
 
-def test_string_multiple_word_palindromes_with_same_spacing() -> None:
+def test_string_multiple_word_palindromes() -> None:
     test_cases = {
-        # all lower case
-        "ave eva": True,
+        # same spacing
         "sator arepo tenet opera rotas": True,
-        "devil lived": True,
-        # all upper case
-        "AVE EVA": True,
-        "SATOR AREPO TENET OPERA ROTAS": True,
-        "DEVIL LIVED": True,
-        # mixed case
-        "Ave Eva": True,
-        "Sator arepo tenet opera rotas": True,
-        "Devil lived": True,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_word_palindromes_with_different_spacing() -> None:
-    test_cases = {
-        # all lower case
-        "do geese see god": True,
+        # different_spacing
         "was it a cat i saw": True,
-        # all upper case
-        "DO GEESE SEE GOD": True,
-        "WAS IT A CAT I SAW": True,
-        # mixed case
-        "Do geese see God": True,
-        "Was it a cat I saw": True,
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
@@ -106,289 +64,30 @@ def test_string_multiple_word_palindromes_with_different_spacing() -> None:
 
 def test_string_multiple_word_non_palindromes() -> None:
     test_cases = {
-        # all lower case
-        "aave eva": False,
-        "sator arepo tneet opera rotas": False,
-        "do geese see good": False,
-        "satan lived": False,
+        # same spacing
+        "ala ma psa": False,
+        # different_spacing
         "was it a dog i saw": False,
-        # all upper case
-        "AAVE EVA": False,
-        "SATOR AREPO TNEET OPERA ROTAS": False,
-        "DO GEESE SEE GOOD": False,
-        "SATAN LIVED": False,
-        "WAS IT A DOG I SAW": False,
-        # mixed case
-        "AAve Eva": False,
-        "Sator arepo tneet opera rotas": False,
-        "Do geese see Good": False,
-        "Satan lived": False,
-        "Was it a dog I saw": False,
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
 
-def test_string_single_words_with_surrounding_spaces() -> None:
+def test_string_multiple_words_palindromes_with_punctuation() -> None:
     test_cases = {
-        # all lower case
-        " abba": True,
-        "towot ": True,
-        "   abba": True,
-        "towot   ": True,
-        " abba ": True,
-        " towot ": True,
-        "   abba ": True,
-        " towot   ": True,
-        " aabba": False,
-        " aabba ": False,
-        "aabba ": False,
-        # all upper case
-        " ABBA": True,
-        "TOWOT ": True,
-        "   ABBA": True,
-        "TOWOT   ": True,
-        " ABBA ": True,
-        " TOWOT ": True,
-        "   ABBA ": True,
-        " TOWOT   ": True,
-        " AABBA": False,
-        " AABBA ": False,
-        "AABBA ": False,
-        # mixed case
-        " Abba": True,
-        "TowOt ": True,
-        "   Abba": True,
-        "TowOt   ": True,
-        " Abba ": True,
-        " TowOt ": True,
-        "   Abba ": True,
-        " TowOt   ": True,
-        " AAbba": False,
-        " AAbba ": False,
-        "AAbba ": False,
+        "Madam, I'm Adam!": True,
+        "Was it a cat I saw?": True,
+        "Race fast, safe car.": True,
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
 
-def test_string_multiple_words_with_surrounding_spaces() -> None:
+def test_string_multiple_words_non_palindromes_with_punctuation() -> None:
     test_cases = {
-        # all lower case
-        " ave eva": True,
-        "sator arepo tenet opera rotas ": True,
-        " devil lived ": True,
-        " aave eva": False,
-        "aave eva ": False,
-        " aave eva ": False,
-        # all upper case
-        "   AVE EVA": True,
-        "SATOR AREPO TENET OPERA ROTAS   ": True,
-        "   DEVIL LIVED   ": True,
-        " AAVE EVA": False,
-        "AAVE EVA ": False,
-        " AAVE EVA ": False,
-        # mixed case
-        " Ave Eva   ": True,
-        "   Sator arepo tenet opera rotas ": True,
-        "  Devil lived   ": True,
-        " AAve eva": False,
-        "AAve eva ": False,
-        " AAve eva ": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_single_words_with_surrounding_punctuation() -> None:
-    test_cases = {
-        # all lower case
-        "abba!": True,
-        "towot?": True,
-        "abba.": True,
-        "!towot": True,
-        "?abba": True,
-        ".towot": True,
-        "!towot!": True,
-        "?abba?": True,
-        ".towot.": True,
-        "aabba!": False,
-        "aabba?": False,
-        "aabba.": False,
-        "!aabba": False,
-        "?aabba": False,
-        ".aabba": False,
-        "!aabba!": False,
-        "?aabba?": False,
-        ".aabba.": False,
-        # all upper case
-        "ABBA!": True,
-        "TOWOT?": True,
-        "ABBA.": True,
-        "!TOWOT": True,
-        "?ABBA": True,
-        ".TOWOT": True,
-        "!TOWOT!": True,
-        "?ABBA?": True,
-        ".TOWOT.": True,
-        "AABBA!": False,
-        "AABBA?": False,
-        "AABBA.": False,
-        "!AABBA": False,
-        "?AABBA": False,
-        ".AABBA": False,
-        "!AABBA!": False,
-        "?AABBA?": False,
-        ".AABBA.": False,
-        # mixed case
-        "Abba!": True,
-        "TowOt?": True,
-        "Abba.": True,
-        "!TowOt": True,
-        "?Abba": True,
-        ".TowOt": True,
-        "!TowOt!": True,
-        "?Abba?": True,
-        ".TowOt.": True,
-        "AAbba!": False,
-        "AAbba?": False,
-        "AAbba.": False,
-        "!AAbba": False,
-        "?AAbba": False,
-        ".AAbba": False,
-        "!AAbba!": False,
-        "?AAbba?": False,
-        ".AAbba.": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_with_surrounding_punctuation() -> None:
-    test_cases = {
-        # all lower case
-        "ave eva!": True,
-        "sator arepo tenet opera rotas?": True,
-        "devil lived.": True,
-        "aave eva!": False,
-        "aave eva?": False,
-        "aave eva.": False,
-        # all upper case
-        "!AVE EVA": True,
-        "?SATOR AREPO TENET OPERA ROTAS": True,
-        ".DEVIL LIVED": True,
-        "!AAVE EVA": False,
-        "?AAVE EVA": False,
-        ".AAVE EVA": False,
-        # mixed case
-        "!Ave Eva!": True,
-        "?Sator arepo tenet opera rotas?": True,
-        ".Devil lived.": True,
-        "!AAve eva!": False,
-        "?AAve eva?": False,
-        ".AAve eva.": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_single_words_with_surrounding_punctuation_and_spaces    () -> None:
-    test_cases = {
-        # all lower case leading space
-        " abba!": True,
-        " towot?": True,
-        " abba.": True,
-        " !towot": True,
-        " ?abba": True,
-        " .towot": True,
-        " !towot!": True,
-        " ?abba?": True,
-        " .towot.": True,
-        " aabba!": False,
-        " aabba?": False,
-        " aabba.": False,
-        " !aabba": False,
-        " ?aabba": False,
-        " .aabba": False,
-        " !aabba!": False,
-        " ?aabba?": False,
-        " .aabba.": False,
-        # all upper case trailing space
-        "ABBA! ": True,
-        "TOWOT? ": True,
-        "ABBA. ": True,
-        "!TOWOT ": True,
-        "?ABBA ": True,
-        ".TOWOT ": True,
-        "!TOWOT! ": True,
-        "?ABBA? ": True,
-        ".TOWOT. ": True,
-        "AABBA! ": False,
-        "AABBA? ": False,
-        "AABBA. ": False,
-        "!AABBA ": False,
-        "?AABBA ": False,
-        ".AABBA ": False,
-        "!AABBA! ": False,
-        "?AABBA? ": False,
-        ".AABBA. ": False,
-        # mixed case both leading and trailing space
-        " Abba! ": True,
-        " TowOt? ": True,
-        " Abba. ": True,
-        " !TowOt ": True,
-        " ?Abba ": True,
-        " .TowOt ": True,
-        " !TowOt! ": True,
-        " ?Abba? ": True,
-        " .TowOt. ": True,
-        " AAbba! ": False,
-        " AAbba? ": False,
-        " AAbba. ": False,
-        " !AAbba ": False,
-        " ?AAbba ": False,
-        " .AAbba ": False,
-        " !AAbba! ": False,
-        " ?AAbba? ": False,
-        " .AAbba. ": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_with_surrounding_punctuation_and_spaces() -> None:
-    test_cases = {
-        # all lower case leading space
-        "   ave eva!": True,
-        "   sator arepo tenet opera rotas?": True,
-        "   devil lived.": True,
-        "   aave eva!": False,
-        "   aave eva?": False,
-        "   aave eva.": False,
-        # all upper case trailing space
-        "!AVE EVA   ": True,
-        "?SATOR AREPO TENET OPERA ROTAS   ": True,
-        ".DEVIL LIVED   ": True,
-        "!AAVE EVA   ": False,
-        "?AAVE EVA   ": False,
-        ".AAVE EVA   ": False,
-        # mixed case both leading and trailing space
-        "   !Ave Eva!   ": True,
-        "   ?Sator arepo tenet opera rotas?   ": True,
-        "   .Devil lived.   ": True,
-        "   !AAve eva!   ": False,
-        "   ?AAve eva?   ": False,
-        "   .AAve eva.   ": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_with_inside_punctuation() -> None:
-    test_cases = {
-        "Madam, I'm Adam": True,
-        "Madam in Eden, I'm Adam": True,
-        "Madam in Heaven, I'm Adam": False,
+        "Man, it's a hot one!": False,
+        "Who is it?": False,
+        "In ancient times cats were worshipped as gods; they have not forgotten this.": False,
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
