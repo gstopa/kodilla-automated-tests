@@ -27,11 +27,10 @@ def translate_data_to_unambiguous_string(data_to_translate: Any) -> str:
 
 
 def prep_string_data(data_to_prep: str) -> str:
-    data_stripped_from_whitespace = data_to_prep.strip()
-    data_without_punctuation = data_stripped_from_whitespace.translate(str.maketrans("", "", string.punctuation))
-    data_case_insensitive = data_without_punctuation.lower()
-    data_no_spaces = ''.join(data_case_insensitive.split())
-    return data_no_spaces
+    translation = str.maketrans("", "", string.punctuation + string.whitespace)
+    data_without_punctuation_and_whitespace = data_to_prep.translate(translation)
+    data_lower_case = data_without_punctuation_and_whitespace.lower()
+    return data_lower_case
 
 
 def compare(data_to_compare: str) -> bool:
