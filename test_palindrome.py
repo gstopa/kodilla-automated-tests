@@ -1,21 +1,29 @@
+import pytest
+from collections import namedtuple
 from palindrome import is_palindrome
 
 
-def test_none_is_not_a_palindrome() -> None:
-    case, expectation = None, False
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
+TestCase = namedtuple('TestCase', ["case", "expectation"])
 
 
-def test_empty_input_is_a_palindrome() -> None:
+def test_non_string_data_raises_valueerror() -> None:
+    test_cases = [
+        TestCase(case=None, expectation="Expected string, got <class 'NoneType'>!"),
+        TestCase(case=b"", expectation="Expected string, got <class 'bytes'>!"),
+        TestCase(case=bytearray(), expectation="Expected string, got <class 'bytearray'>!"),
+        TestCase(case=tuple(), expectation="Expected string, got <class 'tuple'>!"),
+        TestCase(case=[], expectation="Expected string, got <class 'list'>!"),
+        TestCase(case=0, expectation="Expected string, got <class 'int'>!"),
+        TestCase(case=0.0, expectation="Expected string, got <class 'float'>!"),
+    ]
+    for case, expectation in test_cases:
+        with pytest.raises(ValueError) as value_error:
+            is_palindrome(case)
+        assert str(value_error.value) == expectation
+
+
+def test_empty_string_is_a_palindrome() -> None:
     case, expectation = "", True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = b"", True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = tuple(), True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = [], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = bytearray(), True
     assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
 
 
@@ -88,110 +96,6 @@ def test_string_multiple_words_non_palindromes_with_punctuation() -> None:
         "Man, it's a hot one!": False,
         "Who is it?": False,
         "In ancient times cats were worshipped as gods; they have not forgotten this.": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_tuple_of_characters() -> None:
-    test_cases = {
-        ("a", "b", "b", "a"): True,
-        ("t", "o", "w", "o", "t"): True,
-        ("a", "b", "b", "a", " "): True,
-        ("a", "b", "b", "a", "a"): False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_list_of_characters() -> None:
-    case, expectation = ["a", "b", "b", "a"], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["t", "o", "w", "o", "t"], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["a", "b", "b", "a", " "], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["a", "b", "b", "a", "a"], False
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_tuple_of_words() -> None:
-    test_cases = {
-        ("devil", "lived"): True,
-        ("sator", "arepo", "tenet", "opera", "rotas"): True,
-        ("devil", "lived", "!"): True,
-        ("sator", "arepo", "tenet", "arepo", "rotas"): False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_list_of_words() -> None:
-    case, expectation = ["devil", "lived"], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["sator", "arepo", "tenet", "opera", "rotas"], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["devil", "lived", "!"], True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = ["sator", "arepo", "tenet", "arepo", "rotas"], False
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_bytes_instead_strings() -> None:
-    test_cases = {
-        b"abba": True,
-        b"towot": True,
-        b"abba ": True,
-        b"abbaa": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_bytearray_instead_strings() -> None:
-    case, expectation = bytearray("abba", "UTF-8"), True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = bytearray("towot", "UTF-8"), True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = bytearray("abba ", "UTF-8"), True
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-    case, expectation = bytearray("abbaa", "UTF-8"), False
-    assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_integers() -> None:
-    test_cases = {
-        0: True,
-        1: True,
-        11: True,
-        121: True,
-        12321: True,
-        1010101: True,
-        10: False,
-        12: False,
-        112: False,
-        123: False,
-        13321: False,
-        1020101: False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_floats() -> None:
-    test_cases = {
-        0.0: True,
-        1.1: True,
-        11.11: True,
-        121.121: True,
-        123.321: True,
-        10101.10101: True,
-        1.0: False,
-        10.0: False,
-        10.1: False,
-        123.123: False,
-        13.321: False,
-        102.0101: False,
     }
     for case, expectation in test_cases.items():
         assert is_palindrome(case) == expectation, f"Expected '{expectation}' for '{case}'!"
