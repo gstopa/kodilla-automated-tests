@@ -13,9 +13,9 @@ import string
 
 def is_palindrome(
         data: str,
-        case_sensitive: bool = False,
-        whitespace_sensitive: bool = False,
-        punctuation_sensitive: bool = False,
+        case_sensitive: bool = True,
+        whitespace_sensitive: bool = True,
+        punctuation_sensitive: bool = True,
 ) -> bool:
     if not isinstance(data, str):
         raise ValueError(f"Expected string, got {type(data)}!")
