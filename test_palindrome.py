@@ -3,150 +3,149 @@ from collections import namedtuple
 from palindrome import is_palindrome
 
 
-TestCase = namedtuple(
-    typename='TestCase',
-    field_names=["expectation", "data", "case_sensitive", "whitespace_sensitive", "punctuation_sensitive"],
-)
-
-
-def test_non_string_data_raises_valueerror() -> None:
-    options = {
-        "case_sensitive": False,
-        "whitespace_sensitive": False,
-        "punctuation_sensitive": False,
-    }
+@pytest.mark.parametrize("case_sensitive", [True, False])
+@pytest.mark.parametrize("whitespace_sensitive", [True, False])
+@pytest.mark.parametrize("punctuation_sensitive", [True, False])
+def test_non_string_data_raises_valueerror(
+        case_sensitive: bool,
+        whitespace_sensitive: bool,
+        punctuation_sensitive: bool,
+) -> None:
+    TestCaseNoOptions = namedtuple(
+        typename='TestCaseNoOptions',
+        field_names=["expectation", "data"]
+    )
     test_cases = [
-        TestCase(expectation="Expected string, got <class 'NoneType'>!", data=None, **options),
-        TestCase(expectation="Expected string, got <class 'bytes'>!", data=b"", **options),
-        TestCase(expectation="Expected string, got <class 'bytearray'>!", data=bytearray(), **options),
-        TestCase(expectation="Expected string, got <class 'tuple'>!", data=tuple(), **options),
-        TestCase(expectation="Expected string, got <class 'list'>!", data=[], **options),
-        TestCase(expectation="Expected string, got <class 'int'>!", data=0, **options),
-        TestCase(expectation="Expected string, got <class 'float'>!", data=0.0, **options),
+        TestCaseNoOptions(expectation="Expected string, got <class 'NoneType'>!", data=None),
+        TestCaseNoOptions(expectation="Expected string, got <class 'bytes'>!", data=b""),
+        TestCaseNoOptions(expectation="Expected string, got <class 'bytearray'>!", data=bytearray()),
+        TestCaseNoOptions(expectation="Expected string, got <class 'tuple'>!", data=tuple()),
+        TestCaseNoOptions(expectation="Expected string, got <class 'list'>!", data=[]),
+        TestCaseNoOptions(expectation="Expected string, got <class 'int'>!", data=0),
+        TestCaseNoOptions(expectation="Expected string, got <class 'float'>!", data=0.0),
     ]
-    for expectation, data, case_sensitive, whitespace_sensitive, punctuation_sensitive in test_cases:
+    for expectation, data in test_cases:
         with pytest.raises(ValueError) as value_error:
             is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
         assert str(value_error.value) == expectation, \
-            (
-                f"Expected '{expectation}' for '{data}' and "
-                f"options {case_sensitive=}, {whitespace_sensitive=}, {punctuation_sensitive=}!"
-            )
+            f"Expected '{expectation}', got '{str(value_error.value)}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_empty_string_is_a_palindrome() -> None:
+@pytest.mark.parametrize("case_sensitive", [True, False])
+@pytest.mark.parametrize("whitespace_sensitive", [True, False])
+@pytest.mark.parametrize("punctuation_sensitive", [True, False])
+def test_empty_string_is_a_palindrome(
+        case_sensitive: bool,
+        whitespace_sensitive: bool,
+        punctuation_sensitive: bool,
+) -> None:
     expectation, data = True, ""
-    assert is_palindrome(data, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{data}'!"
-    assert is_palindrome(data, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{data}'!"
+    result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+    assert result == expectation,\
+        f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+        f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_string_single_word_palindromes_case_insensitive() -> None:
-    test_cases = {
-        # all lower case
-        "abba": True,  # even length
-        "towot": True,  # odd length
-        # all upper case
-        "ABBA": True,  # even length
-        "TOWOT": True,  # odd length
-        # mixed case
-        "Abba": True,  # even length
-        "TowOt": True,  # odd length
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
+@pytest.mark.parametrize("case_sensitive", [True, False])
+@pytest.mark.parametrize("whitespace_sensitive", [True, False])
+@pytest.mark.parametrize("punctuation_sensitive", [True, False])
+def test_strict_palindromes_that_are_not_affected_by_options(
+        case_sensitive: bool,
+        whitespace_sensitive: bool,
+        punctuation_sensitive: bool,
+) -> None:
+    TestCaseNoOptions = namedtuple(
+        typename='TestCaseNoOptions',
+        field_names=["expectation", "data"]
+    )
+    test_cases = [
+        TestCaseNoOptions(expectation=True, data="abba"),  # lower case even length
+        TestCaseNoOptions(expectation=True, data="towot"),  # lower case odd length
+        TestCaseNoOptions(expectation=True, data="ave eva"),  # with white space
+        TestCaseNoOptions(expectation=True, data="ABBA"),  # upper case
+        TestCaseNoOptions(expectation=True, data="AbbA"),  # mixed case
+        TestCaseNoOptions(expectation=True, data="xml:lmx"),  # with punctuation inside
+        TestCaseNoOptions(expectation=True, data="!abba!"),  # with punctuation outside
+    ]
+    for expectation, data in test_cases:
+        result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+        assert result == expectation, \
+            f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_string_single_word_non_palindromes_due_to_case_sensitive() -> None:
-    test_cases = {
-        # mixed case
-        "Abba": False,  # even length
-        "TowOt": False,  # odd length
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
+@pytest.mark.parametrize("whitespace_sensitive", [True, False])
+@pytest.mark.parametrize("punctuation_sensitive", [True, False])
+def test_palindromes_option_case_sensitive(whitespace_sensitive: bool, punctuation_sensitive: bool) -> None:
+    TestCaseCaseSensitive = namedtuple(
+        typename='TestCaseCaseSensitive',
+        field_names=["expectation", "data", "case_sensitive"]
+    )
+    test_cases = [
+        TestCaseCaseSensitive(expectation=False, data="Atak kata", case_sensitive=True),
+        TestCaseCaseSensitive(expectation=True, data="Atak kata", case_sensitive=False),
+    ]
+    for expectation, data, case_sensitive in test_cases:
+        result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+        assert result == expectation, \
+            f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_string_single_word_non_palindromes() -> None:
-    test_cases = {
-        # all lower case
-        "intel": False,  # odd length
-        "spacje": False,  # even length
-        # all upper case
-        "INTEL": False,  # odd length
-        "SPACJE": False,  # even length
-        # mixed case
-        "Intel": False,  # odd length
-        "Spacje": False,  # even length
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
+@pytest.mark.parametrize("case_sensitive", [True, False])
+@pytest.mark.parametrize("punctuation_sensitive", [True, False])
+def test_palindromes_option_whitespace_sensitive(case_sensitive: bool, punctuation_sensitive: bool) -> None:
+    TestCaseWhitespaceSensitive = namedtuple(
+        typename='TestCaseWhitespaceSensitive',
+        field_names=["expectation", "data", "whitespace_sensitive"],
+    )
+    test_cases = [
+        TestCaseWhitespaceSensitive(expectation=False, data="moc owocom", whitespace_sensitive=True),
+        TestCaseWhitespaceSensitive(expectation=True, data="moc owocom", whitespace_sensitive=False),
+    ]
+    for expectation, data, whitespace_sensitive in test_cases:
+        result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+        assert result == expectation, \
+            f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_string_multiple_word_palindromes_whitespace_insensitive() -> None:
-    test_cases = {
-        # same spacing
-        "sator arepo tenet opera rotas": True,
-        # different_spacing
-        "was it a cat i saw": True,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=False, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
+@pytest.mark.parametrize("case_sensitive", [True, False])
+@pytest.mark.parametrize("whitespace_sensitive", [True, False])
+def test_palindromes_option_punctuation_sensitive(case_sensitive: bool, whitespace_sensitive: bool) -> None:
+    TestCasePunctuationSensitive = namedtuple(
+        typename='TestCasePunctuationSensitive',
+        field_names=["expectation", "data", "punctuation_sensitive"],
+    )
+    test_cases = [
+        TestCasePunctuationSensitive(expectation=False, data="atak kata.", punctuation_sensitive=True),
+        TestCasePunctuationSensitive(expectation=True, data="atak kata.", punctuation_sensitive=False),
+    ]
+    for expectation, data, punctuation_sensitive in test_cases:
+        result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+        assert result == expectation, \
+            f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
 
 
-def test_string_multiple_word_non_palindromes_due_to_whitespace_sensitive() -> None:
-    test_cases = {
-        # same spacing
-        "sator arepo tenet  opera rotas": False,
-        # different_spacing
-        "was it a cat i saw": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=True, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_word_non_palindromes() -> None:
-    test_cases = {
-        # same spacing
-        "ala ma psa": False,
-        # different_spacing
-        "was it a dog i saw": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_palindromes_punctuation_insensitive() -> None:
-    test_cases = {
-        "Madam, I'm Adam!": True,
-        "Was it a cat I saw?": True,
-        "Race fast, safe car.": True,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_non_palindromes_due_to_punctuation_sensitive() -> None:
-    test_cases = {
-        "Madam, I'm Adam!": False,
-        "Was it a cat I saw?": False,
-        "Race fast, safe car.": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
-
-
-def test_string_multiple_words_non_palindromes_with_punctuation() -> None:
-    test_cases = {
-        "Man, it's a hot one!": False,
-        "Who is it?": False,
-        "In ancient times cats were worshipped as gods; they have not forgotten this.": False,
-    }
-    for case, expectation in test_cases.items():
-        assert is_palindrome(case, case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False) == expectation, f"Expected '{expectation}' for '{case}'!"
-        assert is_palindrome(case, case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True) == expectation, f"Expected '{expectation}' for '{case}'!"
+def test_palindromes_all_options_mixed() -> None:
+    TestCaseAllOptions = namedtuple(
+        typename='TestCaseAllOptions',
+        field_names=["expectation", "data", "case_sensitive", "whitespace_sensitive", "punctuation_sensitive"]
+    )
+    test_cases = [
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=True),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=False, whitespace_sensitive=True, punctuation_sensitive=True),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=True, whitespace_sensitive=False, punctuation_sensitive=True),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=True, whitespace_sensitive=True, punctuation_sensitive=False),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=True),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=False, whitespace_sensitive=True, punctuation_sensitive=False),
+        TestCaseAllOptions(False, "Moc owocom!", case_sensitive=True, whitespace_sensitive=False, punctuation_sensitive=False),
+        TestCaseAllOptions(True, "Moc owocom!", case_sensitive=False, whitespace_sensitive=False, punctuation_sensitive=False),
+    ]
+    for expectation, data, case_sensitive, whitespace_sensitive, punctuation_sensitive in test_cases:
+        result = is_palindrome(data, case_sensitive, whitespace_sensitive, punctuation_sensitive)
+        assert result == expectation, \
+            f"Expected '{expectation}', got '{result}' for '{data=}' and "\
+            f"options '{case_sensitive=}', '{whitespace_sensitive=}', '{punctuation_sensitive=}'!"
