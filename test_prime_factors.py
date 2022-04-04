@@ -82,6 +82,7 @@ def test_prime_factors_complex_numbers_with_multiple_3_factors(data: int, expect
     "data,expectation",
     [
         (25, [5, 5]),
+        (625, [5, 5, 5, 5]),
     ],
 )
 def test_prime_factors_complex_numbers_with_multiple_5_factors(data: int, expectation: List[int]) -> None:
