@@ -1,2 +1,5 @@
-def prime_factors(number: int) -> list:
+from typing import List
+
+
+def prime_factors(number: int) -> List[int]:
     return []
