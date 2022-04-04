@@ -12,11 +12,11 @@ def prime_factors(number: int) -> List[int]:
     if not isinstance(number, int):
         raise ValueError(f"Expected integer, got {type(number)}!")
     factors_to_check = possible_factors()
-    factors = []
+    found_factors = []
     for factor in factors_to_check:
         while number % factor == 0:
-            factors.append(factor)
+            found_factors.append(factor)
             number //= factor
         if number == 1:
             break
-    return factors
+    return found_factors
