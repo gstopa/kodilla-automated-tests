@@ -24,10 +24,8 @@ def test_prime_factors_raises_valueerror_when_number_is_not_an_integer(data: Any
         f"Expected '{expectation}', got '{str(value_error.value)}' for '{data}'!"
 
 
-def test_prime_factors_prime_numbers_return_only_itself() -> None:
-    result = prime_factors(number=2)
-    assert result == [2], \
-        f"Expected result=[2], got {result=}!"
-    result = prime_factors(number=11)
-    assert result == [11], \
-        f"Expected result=[2], got {result=}!"
+@pytest.mark.parametrize("data", [2, 11])
+def test_prime_factors_prime_numbers_return_only_itself(data: int) -> None:
+    result = prime_factors(number=data)
+    assert result == [data], \
+        f"Expected result=[{data}], got {result=}!"
