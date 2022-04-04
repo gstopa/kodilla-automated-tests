@@ -38,7 +38,7 @@ def test_prime_factors_even_numbers_returns_at_least_one_2(data: int) -> None:
         f"Expected result has at least one 2, got {result=}!"
 
 
-@pytest.mark.parametrize("data", [9])
+@pytest.mark.parametrize("data", [9, 6])
 def test_prime_factors_numbers_that_are_multiple_of_three_returns_at_least_one_3(data: int) -> None:
     result = prime_factors(number=data)
     assert 3 in result, \
