@@ -102,3 +102,15 @@ def test_prime_factors_complex_numbers_with_single_different_factors(data: int, 
     result = prime_factors(number=data)
     assert result == expectation, \
         f"Expected result={expectation}, got {result=}!"
+
+
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        (174, [2, 3, 29]),
+    ],
+)
+def test_prime_factors_complex_big_numbers(data: int, expectation: List[int]) -> None:
+    result = prime_factors(number=data)
+    assert result == expectation, \
+        f"Expected result={expectation}, got {result=}!"
