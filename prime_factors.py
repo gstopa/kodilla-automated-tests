@@ -16,6 +16,12 @@ def prime_factors(number: int) -> List[int]:
         number /= 5
     if number % 5 == 0:
         factors.append(5)
+        number /= 5
+    if number % 5 == 0:
+        factors.append(5)
+        number /= 5
+    if number % 5 == 0:
+        factors.append(5)
     if factors:
         return factors
     return [number]
