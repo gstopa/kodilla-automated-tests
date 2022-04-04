@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 import pytest
 from prime_factors import prime_factors
 
@@ -36,3 +36,10 @@ def test_prime_factors_even_numbers_returns_at_least_one_2(data: int) -> None:
     result = prime_factors(number=data)
     assert 2 in result, \
         f"Expected result has at least one 2, got {result=}!"
+
+
+@pytest.mark.parametrize("data", [9])
+def test_prime_factors_numbers_that_are_multiple_of_three_returns_at_least_one_3(data: int) -> None:
+    result = prime_factors(number=data)
+    assert 3 in result, \
+        f"Expected result has at least one 3, got {result=}!"
