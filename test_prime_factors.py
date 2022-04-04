@@ -14,6 +14,7 @@ def test_prime_factors_returns_list() -> None:
     [
         (2.0, "Expected integer, got <class 'float'>!"),
         ("2.0", "Expected integer, got <class 'str'>!"),
+        ([], "Expected integer, got <class 'list'>!"),
     ],
 )
 def test_prime_factors_raises_valueerror_when_number_is_not_an_integer(data: Any, expectation: str) -> None:
