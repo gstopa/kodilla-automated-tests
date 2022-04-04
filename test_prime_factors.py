@@ -43,3 +43,10 @@ def test_prime_factors_numbers_that_are_multiple_of_three_returns_at_least_one_3
     result = prime_factors(number=data)
     assert 3 in result, \
         f"Expected result has at least one 3, got {result=}!"
+
+
+@pytest.mark.parametrize("data", [10, 15])
+def test_prime_factors_numbers_that_are_multiple_of_five_returns_at_least_one_5(data: int) -> None:
+    result = prime_factors(number=data)
+    assert 5 in result, \
+        f"Expected result has at least one 5, got {result=}!"
