@@ -29,3 +29,10 @@ def test_prime_factors_prime_numbers_return_only_itself(data: int) -> None:
     result = prime_factors(number=data)
     assert result == [data], \
         f"Expected result=[{data}], got {result=}!"
+
+
+@pytest.mark.parametrize("data", [4])
+def test_prime_factors_even_numbers_returns_at_least_one_2(data: int) -> None:
+    result = prime_factors(number=data)
+    assert 2 in result, \
+        f"Expected result has at least one 2, got {result=}!"
