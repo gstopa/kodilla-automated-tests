@@ -28,3 +28,6 @@ def test_prime_factors_prime_numbers_return_only_itself() -> None:
     result = prime_factors(number=2)
     assert result == [2], \
         f"Expected result=[2], got {result=}!"
+    result = prime_factors(number=11)
+    assert result == [11], \
+        f"Expected result=[2], got {result=}!"
