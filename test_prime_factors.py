@@ -63,3 +63,15 @@ def test_prime_factors_complex_numbers_with_multiple_2_factors(data: int, expect
     result = prime_factors(number=data)
     assert result == expectation, \
         f"Expected result={expectation}, got {result=}!"
+
+
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        (9, [3, 3]),
+    ],
+)
+def test_prime_factors_complex_numbers_with_multiple_3_factors(data: int, expectation: List[int]) -> None:
+    result = prime_factors(number=data)
+    assert result == expectation, \
+        f"Expected result={expectation}, got {result=}!"
