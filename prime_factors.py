@@ -4,19 +4,12 @@ from typing import List
 def prime_factors(number: int) -> List[int]:
     if not isinstance(number, int):
         raise ValueError(f"Expected integer, got {type(number)}!")
+    factors_to_check = [2, 3, 5, 7]
     factors = []
-    while number % 2 == 0:
-        factors.append(2)
-        number /= 2
-    while number % 3 == 0:
-        factors.append(3)
-        number /= 3
-    while number % 5 == 0:
-        factors.append(5)
-        number /= 5
-    while number % 7 == 0:
-        factors.append(7)
-        number /= 7
+    for factor in factors_to_check:
+        while number % factor == 0:
+            factors.append(factor)
+            number /= factor
     if factors:
         return factors
     return [number]
