@@ -108,6 +108,7 @@ def test_prime_factors_complex_numbers_with_single_different_factors(data: int, 
     "data,expectation",
     [
         (174, [2, 3, 29]),
+        (3958159172, [2, 2, 11, 2347, 38329]),
     ],
 )
 def test_prime_factors_complex_big_numbers(data: int, expectation: List[int]) -> None:
