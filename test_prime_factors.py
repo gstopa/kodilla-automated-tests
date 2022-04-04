@@ -95,6 +95,7 @@ def test_prime_factors_complex_numbers_with_multiple_5_factors(data: int, expect
     "data,expectation",
     [
         (70, [2, 5, 7]),
+        (66, [2, 3, 11]),
     ],
 )
 def test_prime_factors_complex_numbers_with_single_different_factors(data: int, expectation: List[int]) -> None:
