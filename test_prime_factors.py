@@ -22,3 +22,9 @@ def test_prime_factors_raises_valueerror_when_number_is_not_an_integer(data: Any
         prime_factors(number=data)
     assert str(value_error.value) == expectation, \
         f"Expected '{expectation}', got '{str(value_error.value)}' for '{data}'!"
+
+
+def test_prime_factors_prime_numbers_return_only_itself() -> None:
+    result = prime_factors(number=2)
+    assert result == [2], \
+        f"Expected result=[2], got {result=}!"
