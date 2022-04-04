@@ -56,6 +56,7 @@ def test_prime_factors_numbers_that_are_multiple_of_five_returns_at_least_one_5(
     "data,expectation",
     [
         (4, [2, 2]),
+        (16, [2, 2, 2, 2]),
     ],
 )
 def test_prime_factors_complex_numbers_with_multiple_same_factors(data: int, expectation: List[int]) -> None:
