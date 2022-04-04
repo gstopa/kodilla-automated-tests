@@ -10,6 +10,4 @@ def prime_factors(number: int) -> List[int]:
         while number % factor == 0:
             factors.append(factor)
             number /= factor
-    if factors:
-        return factors
-    return [number]
+    return factors
