@@ -11,17 +11,9 @@ def prime_factors(number: int) -> List[int]:
     while number % 3 == 0:
         factors.append(3)
         number /= 3
-    if number % 5 == 0:
+    while number % 5 == 0:
         factors.append(5)
         number /= 5
-    if number % 5 == 0:
-        factors.append(5)
-        number /= 5
-    if number % 5 == 0:
-        factors.append(5)
-        number /= 5
-    if number % 5 == 0:
-        factors.append(5)
     if factors:
         return factors
     return [number]
