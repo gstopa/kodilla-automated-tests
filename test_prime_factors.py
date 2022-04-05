@@ -12,29 +12,25 @@ def test_prime_factors_raises_valueerror_when_number_is_not_an_integer(data: Any
 @pytest.mark.parametrize("data", [2, 11])
 def test_prime_factors_prime_numbers_return_only_itself(data: int) -> None:
     result = prime_factors(number=data)
-    assert result == [data], \
-        f"Expected result=[{data}], got {result=}!"
+    assert result == [data]
 
 
 @pytest.mark.parametrize("data", [4, 6])
 def test_prime_factors_even_numbers_returns_at_least_one_2(data: int) -> None:
     result = prime_factors(number=data)
-    assert 2 in result, \
-        f"Expected result has at least one 2, got {result=}!"
+    assert 2 in result
 
 
 @pytest.mark.parametrize("data", [9, 6])
 def test_prime_factors_numbers_that_are_multiple_of_three_returns_at_least_one_3(data: int) -> None:
     result = prime_factors(number=data)
-    assert 3 in result, \
-        f"Expected result has at least one 3, got {result=}!"
+    assert 3 in result
 
 
 @pytest.mark.parametrize("data", [10, 15])
 def test_prime_factors_numbers_that_are_multiple_of_five_returns_at_least_one_5(data: int) -> None:
     result = prime_factors(number=data)
-    assert 5 in result, \
-        f"Expected result has at least one 5, got {result=}!"
+    assert 5 in result
 
 
 @pytest.mark.parametrize(
@@ -46,8 +42,7 @@ def test_prime_factors_numbers_that_are_multiple_of_five_returns_at_least_one_5(
 )
 def test_prime_factors_complex_numbers_with_multiple_2_factors(data: int, expectation: List[int]) -> None:
     result = prime_factors(number=data)
-    assert result == expectation, \
-        f"Expected result={expectation}, got {result=}!"
+    assert result == expectation
 
 
 @pytest.mark.parametrize(
@@ -59,8 +54,7 @@ def test_prime_factors_complex_numbers_with_multiple_2_factors(data: int, expect
 )
 def test_prime_factors_complex_numbers_with_multiple_3_factors(data: int, expectation: List[int]) -> None:
     result = prime_factors(number=data)
-    assert result == expectation, \
-        f"Expected result={expectation}, got {result=}!"
+    assert result == expectation
 
 
 @pytest.mark.parametrize(
@@ -72,8 +66,7 @@ def test_prime_factors_complex_numbers_with_multiple_3_factors(data: int, expect
 )
 def test_prime_factors_complex_numbers_with_multiple_5_factors(data: int, expectation: List[int]) -> None:
     result = prime_factors(number=data)
-    assert result == expectation, \
-        f"Expected result={expectation}, got {result=}!"
+    assert result == expectation
 
 
 @pytest.mark.parametrize(
@@ -85,8 +78,7 @@ def test_prime_factors_complex_numbers_with_multiple_5_factors(data: int, expect
 )
 def test_prime_factors_complex_numbers_with_single_different_factors(data: int, expectation: List[int]) -> None:
     result = prime_factors(number=data)
-    assert result == expectation, \
-        f"Expected result={expectation}, got {result=}!"
+    assert result == expectation
 
 
 @pytest.mark.parametrize(
@@ -98,5 +90,4 @@ def test_prime_factors_complex_numbers_with_single_different_factors(data: int, 
 )
 def test_prime_factors_complex_big_numbers(data: int, expectation: List[int]) -> None:
     result = prime_factors(number=data)
-    assert result == expectation, \
-        f"Expected result={expectation}, got {result=}!"
+    assert result == expectation
