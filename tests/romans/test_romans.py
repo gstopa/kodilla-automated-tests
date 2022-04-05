@@ -17,5 +17,17 @@ def test_to_romans_raises_valueerror_when_number_not_in_range_1_to_3999_both_inc
         to_romans(number=data)
 
 
-def test_to_romans_convert_1_to_i() -> None:
-    assert to_romans(number=1) == "I"
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        (1, "I"),
+        (5, "V"),
+        (10, "X"),
+        (50, "L"),
+        (100, "C"),
+        (500, "D"),
+        (1000, "M"),
+    ],
+)
+def test_to_romans_convert_number_into_single_character_roman_number(data: int, expectation: str) -> None:
+    assert to_romans(number=data) == expectation
