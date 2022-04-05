@@ -1,8 +1,8 @@
 from itertools import count
-from typing import List
+from typing import Iterator, List
 
 
-def possible_factors():
+def possible_factors() -> Iterator[int]:
     yield 2
     for value in count(3, step=2):  # pragma: no branch
         yield value
