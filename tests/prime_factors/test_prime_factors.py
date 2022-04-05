@@ -1,6 +1,6 @@
 from typing import Any, List
 import pytest
-from prime_factors import prime_factors
+from prime_factors.prime_factors import prime_factors
 
 
 @pytest.mark.parametrize("data", [2.0, "2.0", []])
