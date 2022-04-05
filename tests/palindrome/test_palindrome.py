@@ -1,6 +1,6 @@
 import pytest
 from collections import namedtuple
-from palindrome import is_palindrome
+from palindrome.palindrome import is_palindrome
 
 
 @pytest.mark.parametrize("case_sensitive", [True, False])
