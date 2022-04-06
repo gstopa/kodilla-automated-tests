@@ -16,7 +16,7 @@ ROMANS_LOOKUP = {
 }
 
 
-def to_romans(number: int) -> str:
+def decimal_to_romans(number: int) -> str:
     if not isinstance(number, int):
         raise TypeError(f"Expected number to be an integer, got {type(number)}!")
     if number not in range(1, 4000):

@@ -2,19 +2,19 @@ from typing import Any
 
 import pytest
 
-from romans.romans import to_romans
+from romans.romans import decimal_to_romans
 
 
 @pytest.mark.parametrize("data", [1.0, "1", []])
-def test_to_romans_raises_typeerror_when_number_is_not_integer(data: Any) -> None:
+def test_decimal_to_romans_raises_typeerror_when_number_is_not_integer(data: Any) -> None:
     with pytest.raises(TypeError):
-        to_romans(number=data)
+        decimal_to_romans(number=data)
 
 
 @pytest.mark.parametrize("data", [-1, 0, 4000, 4001])
-def test_to_romans_raises_valueerror_when_number_not_in_range_1_to_3999_both_inclusive(data: int) -> None:
+def test_decimal_to_romans_raises_valueerror_when_number_not_in_range_1_to_3999_both_inclusive(data: int) -> None:
     with pytest.raises(ValueError):
-        to_romans(number=data)
+        decimal_to_romans(number=data)
 
 
 @pytest.mark.parametrize(
@@ -29,8 +29,8 @@ def test_to_romans_raises_valueerror_when_number_not_in_range_1_to_3999_both_inc
         (1000, "M"),
     ],
 )
-def test_to_romans_convert_number_into_single_roman_character(data: int, expectation: str) -> None:
-    assert to_romans(number=data) == expectation
+def test_decimal_to_romans_convert_number_into_single_roman_character(data: int, expectation: str) -> None:
+    assert decimal_to_romans(number=data) == expectation
 
 
 @pytest.mark.parametrize(
@@ -44,8 +44,8 @@ def test_to_romans_convert_number_into_single_roman_character(data: int, expecta
         (900, "CM"),
     ],
 )
-def test_to_romans_convert_number_into_complex_one_less_than_roman_characters(data: int, expectation: str) -> None:
-    assert to_romans(number=data) == expectation
+def test_decimal_to_romans_convert_number_into_complex_one_less_than_roman_characters(data: int, expectation: str) -> None:
+    assert decimal_to_romans(number=data) == expectation
 
 
 @pytest.mark.parametrize(
@@ -63,5 +63,5 @@ def test_to_romans_convert_number_into_complex_one_less_than_roman_characters(da
         (1111, "MCXI"),
     ],
 )
-def test_to_romans_convert_number_into_complex_roman_characters(data: int, expectation: str) -> None:
-    assert to_romans(number=data) == expectation
+def test_decimal_to_romans_convert_number_into_complex_roman_characters(data: int, expectation: str) -> None:
+    assert decimal_to_romans(number=data) == expectation
