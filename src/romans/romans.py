@@ -1,4 +1,4 @@
-ROMANS_LOOKUP = {
+DECIMAL_TO_ROMANS_LOOKUP = {
     1: "I",
     4: "IV",
     5: "V",
@@ -22,9 +22,11 @@ def decimal_to_romans(number: int) -> str:
     if number not in range(1, 4000):
         raise ValueError(f"Expected number to be in range [1; 3999], got {number}!")
     romans = []
-    for decimal in [1000, 900, 500, 400, 200, 100, 90, 50, 40, 10, 9, 5, 4, 1]:  # pragma: no branch
+    major_decimals = list(DECIMAL_TO_ROMANS_LOOKUP.keys())
+    major_decimals.sort(reverse=True)
+    for decimal in major_decimals:  # pragma: no branch
         while number >= decimal:
-            romans.append(ROMANS_LOOKUP[decimal])
+            romans.append(DECIMAL_TO_ROMANS_LOOKUP[decimal])
             number -= decimal
         if number == 0:
             break
