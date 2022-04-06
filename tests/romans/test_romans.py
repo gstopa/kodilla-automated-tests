@@ -46,3 +46,22 @@ def test_to_romans_convert_number_into_single_roman_character(data: int, expecta
 )
 def test_to_romans_convert_number_into_complex_one_less_than_roman_characters(data: int, expectation: str) -> None:
     assert to_romans(number=data) == expectation
+
+
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        (2000, "MM"),
+        (1100, "MC"),
+        (200, "CC"),
+        (3999, "MMMCMXCIX"),
+        (3888, "MMMDCCCLXXXVIII"),
+        (3333, "MMMCCCXXXIII"),
+        (2777, "MMDCCLXXVII"),
+        (2222, "MMCCXXII"),
+        (1666, "MDCLXVI"),
+        (1111, "MCXI"),
+    ],
+)
+def test_to_romans_convert_number_into_complex_roman_characters(data: int, expectation: str) -> None:
+    assert to_romans(number=data) == expectation
