@@ -21,11 +21,11 @@ def decimal_to_romans(number: int) -> str:
         raise TypeError(f"Expected number to be an integer, got {type(number)}!")
     if number not in range(1, 4000):
         raise ValueError(f"Expected number to be in range [1; 3999], got {number}!")
-    roman_value_elements = []
+    romans = []
     for decimal in [1000, 900, 500, 400, 200, 100, 90, 50, 40, 10, 9, 5, 4, 1]:  # pragma: no branch
         while number >= decimal:
-            roman_value_elements.append(ROMANS_LOOKUP[decimal])
+            romans.append(ROMANS_LOOKUP[decimal])
             number -= decimal
         if number == 0:
             break
-    return "".join(roman_value_elements)
+    return "".join(romans)
