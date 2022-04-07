@@ -75,3 +75,14 @@ def test_romans_to_decimal_convert_i_into_1() -> None:
 def test_romans_to_decimal_raises_typeerror_when_romans_is_not_string(data: Any) -> None:
     with pytest.raises(TypeError):
         romans_to_decimal(romans=data)
+
+
+def test_romans_to_decimal_raises_valueerror_when_romans_is_empty_string() -> None:
+    with pytest.raises(ValueError):
+        romans_to_decimal(romans="")
+
+
+@pytest.mark.parametrize("data", ["qwerty", "ivxlcdm"])
+def test_romans_to_decimal_raises_valueerror_when_romans_contain_non_romans_characters(data: str) -> None:
+    with pytest.raises(ValueError):
+        romans_to_decimal(romans=data)

@@ -1,3 +1,4 @@
+ROMANS_CHARACTERS = {'I', 'V', 'X', 'L', 'C', 'D', 'M'}
 DECIMAL_TO_ROMANS_LOOKUP = {
     1: "I",
     4: "IV",
@@ -33,7 +34,18 @@ def decimal_to_romans(number: int) -> str:
     return "".join(romans)
 
 
+def contains_invalid_characters(romans: str) -> bool:
+    return ROMANS_CHARACTERS | set(romans) != ROMANS_CHARACTERS
+
+
 def romans_to_decimal(romans: str) -> int:
     if not isinstance(romans, str):
         raise TypeError(f"Expected romans to be a string, got {type(romans)}!")
+    if len(romans) == 0:
+        raise ValueError("String romans is empty!")
+    if contains_invalid_characters(romans):
+        raise ValueError(
+            "String romans contains invalid characters!"
+            f"\nValid characters are 'I', 'V', 'X', 'L', 'C', 'D', 'M'; got '{romans}'!"
+        )
     return 1
