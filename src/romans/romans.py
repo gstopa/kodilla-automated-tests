@@ -57,7 +57,13 @@ def romans_to_decimal(romans: str) -> int:
             "String romans contains invalid characters!"
             f"\nValid characters are 'I', 'V', 'X', 'L', 'C', 'D', 'M'; got '{romans}'!"
         )
-    number = 0
-    for roman in romans:
-        number += ROMANS_TO_DECIMAL_LOOKUP[roman]
-    return number
+    whole_number = 0
+    previous_number = 0
+    for roman in romans[::-1]:
+        current_number = ROMANS_TO_DECIMAL_LOOKUP[roman]
+        if current_number < previous_number:
+            whole_number -= current_number
+        else:
+            whole_number += current_number
+        previous_number = current_number
+    return whole_number

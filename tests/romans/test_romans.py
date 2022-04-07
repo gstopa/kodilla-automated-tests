@@ -111,3 +111,14 @@ def test_romans_to_decimal_convert_single_roman_character_to_number(data: str, e
 )
 def test_romans_to_decimal_convert_complex_additive_only_roman_characters_to_number(data: str, expectation: int) -> None:
     assert romans_to_decimal(romans=data) == expectation
+
+
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        ("MCDXLIV", 1444),
+        ("MCMXCIX", 1999),
+    ],
+)
+def test_romans_to_decimal_convert_complex_one_less_than_roman_characters_to_number(data: str, expectation: int) -> None:
+    assert romans_to_decimal(romans=data) == expectation
