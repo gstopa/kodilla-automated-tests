@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from romans.romans import decimal_to_romans
+from romans.romans import decimal_to_romans, romans_to_decimal
 
 
 @pytest.mark.parametrize("data", [1.0, "1", []])
@@ -65,3 +65,7 @@ def test_decimal_to_romans_convert_number_into_complex_one_less_than_roman_chara
 )
 def test_decimal_to_romans_convert_number_into_complex_roman_characters(data: int, expectation: str) -> None:
     assert decimal_to_romans(number=data) == expectation
+
+
+def test_romans_to_decimal_convert_i_into_1() -> None:
+    assert romans_to_decimal(romans="I") == 1

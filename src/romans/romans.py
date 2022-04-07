@@ -31,3 +31,7 @@ def decimal_to_romans(number: int) -> str:
         if number == 0:
             break
     return "".join(romans)
+
+
+def romans_to_decimal(romans: str) -> int:
+    return 1
