@@ -67,10 +67,6 @@ def test_decimal_to_romans_convert_number_into_complex_roman_characters(data: in
     assert decimal_to_romans(number=data) == expectation
 
 
-def test_romans_to_decimal_convert_i_into_1() -> None:
-    assert romans_to_decimal(romans="I") == 1
-
-
 @pytest.mark.parametrize("data", [1.0, 1, []])
 def test_romans_to_decimal_raises_typeerror_when_romans_is_not_string(data: Any) -> None:
     with pytest.raises(TypeError):
@@ -86,3 +82,7 @@ def test_romans_to_decimal_raises_valueerror_when_romans_is_empty_string() -> No
 def test_romans_to_decimal_raises_valueerror_when_romans_contain_non_romans_characters(data: str) -> None:
     with pytest.raises(ValueError):
         romans_to_decimal(romans=data)
+
+
+def test_romans_to_decimal_convert_i_into_1() -> None:
+    assert romans_to_decimal(romans="I") == 1
