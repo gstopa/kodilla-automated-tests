@@ -34,4 +34,6 @@ def decimal_to_romans(number: int) -> str:
 
 
 def romans_to_decimal(romans: str) -> int:
+    if not isinstance(romans, str):
+        raise TypeError(f"Expected romans to be a string, got {type(romans)}!")
     return 1

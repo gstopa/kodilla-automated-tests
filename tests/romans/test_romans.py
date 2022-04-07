@@ -69,3 +69,9 @@ def test_decimal_to_romans_convert_number_into_complex_roman_characters(data: in
 
 def test_romans_to_decimal_convert_i_into_1() -> None:
     assert romans_to_decimal(romans="I") == 1
+
+
+@pytest.mark.parametrize("data", [1.0, 1, []])
+def test_romans_to_decimal_raises_typeerror_when_romans_is_not_string(data: Any) -> None:
+    with pytest.raises(TypeError):
+        romans_to_decimal(romans=data)
