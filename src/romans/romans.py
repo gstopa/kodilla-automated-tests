@@ -57,6 +57,20 @@ def romans_to_decimal(romans: str) -> int:
             "String romans contains invalid characters!"
             f"\nValid characters are 'I', 'V', 'X', 'L', 'C', 'D', 'M'; got '{romans}'!"
         )
+    if "IIII" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'IIII'!")
+    if "XXXX" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'XXXX'!")
+    if "CCCC" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'CCCC'!")
+    if "MMMM" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'MMMM'!")
+    if "VV" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'VV'!")
+    if "LL" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'LL'!")
+    if "DD" in romans:
+        raise ValueError(f"String romans contains invalid sequence 'DD'!")
     whole_number = 0
     previous_number = 0
     for roman in romans[::-1]:

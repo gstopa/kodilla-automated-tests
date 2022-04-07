@@ -122,3 +122,9 @@ def test_romans_to_decimal_convert_complex_additive_only_roman_characters_to_num
 )
 def test_romans_to_decimal_convert_complex_one_less_than_roman_characters_to_number(data: str, expectation: int) -> None:
     assert romans_to_decimal(romans=data) == expectation
+
+
+@pytest.mark.parametrize("data", ["IIII", "XXXX", "CCCC", "MMMM", "VV", "LL", "DD"])
+def test_romans_to_decimal_raises_valueerror_when_too_many_same_characters_in_a_row(data: str) -> None:
+    with pytest.raises(ValueError):
+        assert romans_to_decimal(romans=data)
