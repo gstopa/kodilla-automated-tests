@@ -60,6 +60,16 @@ def is_invalid_romans_numeral(romans: str) -> bool:
     return not bool(ROMAN_NUMERAL_REGEX.search(romans))
 
 
+def translate_from_one_less_into_additive_only_roman_numeral(romans: str) -> str:
+    romans = romans.replace("CM", "DCCCC")
+    romans = romans.replace("CD", "CCCC")
+    romans = romans.replace("XC", "LXXXX")
+    romans = romans.replace("XL", "XXXX")
+    romans = romans.replace("IX", "VIIII")
+    romans = romans.replace("IV", "IIII")
+    return romans
+
+
 def romans_to_decimal(romans: str) -> int:
     if not isinstance(romans, str):
         raise TypeError(f"Expected romans to be a string, got {type(romans)}!")
@@ -67,13 +77,8 @@ def romans_to_decimal(romans: str) -> int:
         raise ValueError("String romans is empty!")
     if is_invalid_romans_numeral(romans):
         raise ValueError(f"Invalid romans numeral, got '{romans}'!")
+    romans = translate_from_one_less_into_additive_only_roman_numeral(romans)
     whole_number = 0
-    previous_number = 0
-    for roman in romans[::-1]:
-        current_number = ROMANS_TO_DECIMAL_LOOKUP[roman]
-        if current_number < previous_number:
-            whole_number -= current_number
-        else:
-            whole_number += current_number
-        previous_number = current_number
+    for roman in romans:
+        whole_number += ROMANS_TO_DECIMAL_LOOKUP[roman]
     return whole_number
