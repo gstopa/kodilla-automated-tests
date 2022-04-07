@@ -1,4 +1,17 @@
-ROMANS_CHARACTERS = {'I', 'V', 'X', 'L', 'C', 'D', 'M'}
+import re
+
+
+ROMAN_NUMERAL_REGEX = re.compile(
+    r'''
+    ^
+    M{0,3}              # up to 3 thousands
+    (CM|CD|D?C{0,3})    # 900, 400, 500-800 or 0-300
+    (XC|XL|L?X{0,3})    # 90, 40, 50-80 or 0-30
+    (IX|IV|V?I{0,3})    # 9, 4, 5-8 or 0-3
+    $
+    ''',
+    re.VERBOSE
+)
 ROMANS_TO_DECIMAL_LOOKUP = {
     "I": 1,
     "V": 5,
@@ -43,8 +56,8 @@ def decimal_to_romans(number: int) -> str:
     return "".join(romans)
 
 
-def contains_invalid_characters(romans: str) -> bool:
-    return ROMANS_CHARACTERS | set(romans) != ROMANS_CHARACTERS
+def is_invalid_romans_numeral(romans: str) -> bool:
+    return not bool(ROMAN_NUMERAL_REGEX.search(romans))
 
 
 def romans_to_decimal(romans: str) -> int:
@@ -52,25 +65,8 @@ def romans_to_decimal(romans: str) -> int:
         raise TypeError(f"Expected romans to be a string, got {type(romans)}!")
     if len(romans) == 0:
         raise ValueError("String romans is empty!")
-    if contains_invalid_characters(romans):
-        raise ValueError(
-            "String romans contains invalid characters!"
-            f"\nValid characters are 'I', 'V', 'X', 'L', 'C', 'D', 'M'; got '{romans}'!"
-        )
-    if "IIII" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'IIII'!")
-    if "XXXX" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'XXXX'!")
-    if "CCCC" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'CCCC'!")
-    if "MMMM" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'MMMM'!")
-    if "VV" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'VV'!")
-    if "LL" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'LL'!")
-    if "DD" in romans:
-        raise ValueError(f"String romans contains invalid sequence 'DD'!")
+    if is_invalid_romans_numeral(romans):
+        raise ValueError(f"Invalid romans numeral, got '{romans}'!")
     whole_number = 0
     previous_number = 0
     for roman in romans[::-1]:

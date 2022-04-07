@@ -128,3 +128,9 @@ def test_romans_to_decimal_convert_complex_one_less_than_roman_characters_to_num
 def test_romans_to_decimal_raises_valueerror_when_too_many_same_characters_in_a_row(data: str) -> None:
     with pytest.raises(ValueError):
         assert romans_to_decimal(romans=data)
+
+
+@pytest.mark.parametrize("data", ["IL", "IC", "ID", "IM"])
+def test_romans_to_decimal_raises_valueerror_when_invalid_one_less_than_sequence(data: str) -> None:
+    with pytest.raises(ValueError):
+        assert romans_to_decimal(romans=data)
