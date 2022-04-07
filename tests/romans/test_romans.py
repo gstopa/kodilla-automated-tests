@@ -84,5 +84,17 @@ def test_romans_to_decimal_raises_valueerror_when_romans_contain_non_romans_char
         romans_to_decimal(romans=data)
 
 
-def test_romans_to_decimal_convert_i_into_1() -> None:
-    assert romans_to_decimal(romans="I") == 1
+@pytest.mark.parametrize(
+    "data,expectation",
+    [
+        ("I", 1),
+        ("V", 5),
+        ("X", 10),
+        ("L", 50),
+        ("C", 100),
+        ("D", 500),
+        ("M", 1000),
+    ],
+)
+def test_romans_to_decimal_convert_single_roman_character_to_number(data: str, expectation: int) -> None:
+    assert romans_to_decimal(romans=data) == expectation

@@ -1,4 +1,13 @@
 ROMANS_CHARACTERS = {'I', 'V', 'X', 'L', 'C', 'D', 'M'}
+ROMANS_TO_DECIMAL_LOOKUP = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+}
 DECIMAL_TO_ROMANS_LOOKUP = {
     1: "I",
     4: "IV",
@@ -48,4 +57,4 @@ def romans_to_decimal(romans: str) -> int:
             "String romans contains invalid characters!"
             f"\nValid characters are 'I', 'V', 'X', 'L', 'C', 'D', 'M'; got '{romans}'!"
         )
-    return 1
+    return ROMANS_TO_DECIMAL_LOOKUP[romans]
