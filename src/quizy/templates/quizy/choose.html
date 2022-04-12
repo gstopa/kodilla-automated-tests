@@ -4,7 +4,7 @@
     <h1>Hello {{ current_user.username }}!</h1>
 {% endif %}
     <h2>Choose wisely!</h2>
-    <form action="/quizy_create" method="post">
+    <form action="/quizy/create" method="post">
         <input type="radio" id="easy" name="difficulty" value="easy"><label for="easy">easy</label><br>
         <input type="radio" id="medium" name="difficulty" value="medium"><label for="medium">medium</label><br>
         <input type="radio" id="hard" name="difficulty" value="hard"><label for="hard">hard</label><br>

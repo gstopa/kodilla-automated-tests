@@ -28,11 +28,13 @@
         <tbody>
         {% for result in ranking %}
             <tr>
-                <td>{{ result.quiz_uuid }}</td>
+                <td>{{ result.uuid }}</td>
                 <td>{{ result.user_id }}</td>
                 <td>{{ result.score }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <br>
+    <p><a href="/ranking/json">See it in JSON!</a></p>
 {% endblock %}
