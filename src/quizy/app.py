@@ -3,6 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin
 
 
+RANKING = [
+    {"quiz_uuid": "1234-abcdef-123456-abcd", "user_id": 1, "score": 6},
+    {"quiz_uuid": "1234-abcdef-123456-abce", "user_id": 2, "score": 5},
+    {"quiz_uuid": "1234-abcdef-123456-abcf", "user_id": 3, "score": 8},
+]
+
+
+def get_ranking(sort: bool = True, reverse: bool = True) -> list:
+    ranking = RANKING
+    if sort:
+        ranking = sorted(RANKING, key=lambda result: result["score"], reverse=reverse)
+    return ranking
+
+
 class ConfigClass(object):
     # Flask settings
     SECRET_KEY = 'something'
@@ -35,9 +49,13 @@ def create_app() -> Flask:
     def index_page():
         return render_template("index.html")
 
-    @app.route('/rankings')
-    def rankings_page():
-        return render_template("rankings.html")
+    @app.route('/ranking')
+    def ranking_page():
+        return render_template("ranking.html", ranking=get_ranking())
+
+    @app.route('/ranking.json')
+    def ranking_json_page():
+        return {"ranking": get_ranking()}
 
     @app.route('/quizy_choose')
     @login_required
@@ -52,6 +70,6 @@ def create_app() -> Flask:
     @app.route('/quizy_count_me_in')
     @login_required
     def quizy_count_me_in_page():
-        return redirect(url_for("rankings_page"))
+        return redirect(url_for("ranking_page"))
 
     return app
