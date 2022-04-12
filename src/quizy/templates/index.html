@@ -1,0 +1,11 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+{% if current_user.username %}
+    <h1>Hello {{ current_user.username }}!</h1>
+{% endif %}
+    <h2>Those are the quizzes!</h2>
+    <ul>
+        <li><a href="/rankings">Rankings</a></li>
+        <li><a href="/quizy_choose">Test yourself!</a></li>
+    </ul>
+{% endblock %}
