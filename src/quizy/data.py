@@ -1,6 +1,6 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from uuid import uuid4
-from quizy.data_models import QuizResult, QuizTest
+from quizy.data_models import QuizQuestion, QuizResult, QuizTest
 
 
 POINTS_MULTIPLIER: Dict[str, int] = {
@@ -14,14 +14,14 @@ QUIZZES: Dict[str, QuizTest] = {}
 QUIZZES_TAKEN: List[QuizResult] = []
 
 
-def get_ranking(sort: bool = True, reverse: bool = True) -> list:
+def get_ranking(sort: bool = True, reverse: bool = True) -> List[QuizResult]:
     ranking = QUIZZES_TAKEN
     if sort:
         ranking = sorted(QUIZZES_TAKEN, key=lambda result: result.score, reverse=reverse)
     return ranking
 
 
-def calculate_quiz_score(quiz_uuid, answers):
+def calculate_quiz_score(quiz_uuid: str, answers: Dict[str, str]) -> int:
     quiz = QUIZZES[quiz_uuid]
     multiplier = POINTS_MULTIPLIER[quiz.difficulty]
     questions = quiz.questions
@@ -33,12 +33,12 @@ def calculate_quiz_score(quiz_uuid, answers):
     return sum(questions_points)
 
 
-def add_score_to_ranking(quiz_uuid, user_id, score):
+def add_score_to_ranking(quiz_uuid: str, user_id: int, score: int) -> None:
     quiz_result = QuizResult(uuid=quiz_uuid, user_id=user_id, score=score)
     QUIZZES_TAKEN.append(quiz_result)
 
 
-def create_new_quiz(difficulty, questions) -> str:
+def create_new_quiz(difficulty: str, questions: List[QuizQuestion]) -> str:
     quiz_uuid = str(uuid4())
     quiz_questions = {
         str(index): question
@@ -48,7 +48,7 @@ def create_new_quiz(difficulty, questions) -> str:
     return quiz_uuid
 
 
-def get_quiz_questions(uuid):
+def get_quiz_questions(uuid: str) -> Optional[Dict[str, QuizQuestion]]:
     if uuid in QUIZZES:
         return QUIZZES[uuid].questions
     return None

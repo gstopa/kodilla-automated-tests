@@ -18,5 +18,5 @@ class QuizTest:
 @dataclass
 class QuizResult:
     uuid: str
-    user_id: str
+    user_id: int
     score: int

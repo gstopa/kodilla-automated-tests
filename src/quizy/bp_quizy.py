@@ -28,7 +28,7 @@ def create_page():
 
 @bp_quizy.route('/take/<uuid>')
 # @login_required
-def take_page(uuid):
+def take_page(uuid: str):
     quiz_questions = get_quiz_questions(uuid)
     if not quiz_questions:
         return redirect(url_for('quizy.choose_page'))
