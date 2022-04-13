@@ -1,0 +1,3 @@
+from fixtures.questions_easy import easy_questions_json, easy_quiz_questions
+from fixtures.questions_medium import medium_questions_json, medium_quiz_questions
+from fixtures.questions_hard import hard_questions_json, hard_quiz_questions
