@@ -1,3 +1,4 @@
+import pytest
 import responses
 from quizy.questions import generate_questions
 
@@ -33,3 +34,14 @@ def test_generate_hard_questions(hard_questions_json, hard_quiz_questions) -> No
         status=200,
     )
     assert generate_questions(difficulty='hard') == hard_quiz_questions
+
+
+@responses.activate
+def test_generate_questions_raises_connectionerror_when_opentdb_not_accessible() -> None:
+    with pytest.raises(ConnectionError):
+        generate_questions(difficulty='easy')
+
+
+def test_generate_questions_raises_valueerror_when_difficulty_is_wrong() -> None:
+    with pytest.raises(ValueError):
+        generate_questions(difficulty='badadam')
