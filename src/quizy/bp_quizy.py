@@ -13,11 +13,9 @@ def choose_page():
     return render_template('choose.html')
 
 
-@bp_quizy.route('/create', methods=['GET', 'POST'])
+@bp_quizy.route('/create', methods=['POST'])
 # @login_required
 def create_page():
-    if request.method != 'POST':
-        return redirect(url_for('quizy.choose_page'))
     difficulty = request.form.get('difficulty')
     if difficulty not in {'easy', 'medium', 'hard'}:
         return redirect(url_for('quizy.choose_page'))
@@ -36,11 +34,9 @@ def take_page(uuid: str):
     return render_template('take.html', quiz=quiz_questions)
 
 
-@bp_quizy.route('/count_me_in', methods=['GET', 'POST'])
+@bp_quizy.route('/count_me_in', methods=['POST'])
 # @login_required
 def count_me_in_page():
-    if request.method != 'POST':
-        return redirect(url_for('quizy.choose_page'))
     quiz_uuid = session.pop('quiz_uuid')
     score = calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
     user_id = current_user.id if current_user.is_authenticated else 666

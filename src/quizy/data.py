@@ -14,11 +14,8 @@ QUIZZES: Dict[str, QuizTest] = {}
 QUIZZES_TAKEN: List[QuizResult] = []
 
 
-def get_ranking(sort: bool = True, reverse: bool = True) -> List[QuizResult]:
-    ranking = QUIZZES_TAKEN
-    if sort:
-        ranking = sorted(QUIZZES_TAKEN, key=lambda result: result.score, reverse=reverse)
-    return ranking
+def get_ranking() -> List[QuizResult]:
+    return sorted(QUIZZES_TAKEN, key=lambda result: result.score, reverse=True)
 
 
 def calculate_quiz_score(quiz_uuid: str, answers: Dict[str, str]) -> int:

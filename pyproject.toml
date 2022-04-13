@@ -9,21 +9,19 @@ minversion = "6.0"
 addopts = "-ra --doctest-modules --cov -vv"
 testpaths = [
   "tests",
-  "src",
 ]
 
 [tool.coverage.run]
-include = ["src"]
 source = ["src"]
-omit = [
-  "tests",
-  "src/kodilla/__init__.py",
-]
+omit = ["tests"]
 branch = true
 
 [tool.coverage.report]
 show_missing = true
-exclude_lines = ["def __repr__"]
+exclude_lines = [
+  "def __repr__",
+  "pragma: no cover"
+]
 
 [tool.coverage.html]
 directory = "docs/coverage"
