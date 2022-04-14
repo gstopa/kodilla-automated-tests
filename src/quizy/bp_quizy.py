@@ -17,9 +17,10 @@ def choose_page():
 # @login_required
 def create_page():
     difficulty = request.form.get('difficulty')
-    if difficulty not in {'easy', 'medium', 'hard'}:
+    try:
+        questions = generate_questions(difficulty=difficulty)
+    except ValueError:
         return redirect(url_for('quizy.choose_page'))
-    questions = generate_questions(difficulty=difficulty)
     quiz_uuid = create_new_quiz(difficulty=request.form['difficulty'], questions=questions)
     return redirect(url_for('quizy.take_page', uuid=quiz_uuid))
 
