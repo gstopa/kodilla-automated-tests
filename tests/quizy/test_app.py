@@ -2,7 +2,6 @@ import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 from quizy.app import create_app
-import quizy.data
 
 
 @pytest.fixture(name='app')
@@ -12,10 +11,6 @@ def fixture_app() -> Flask:
         "TESTING": True,
     })
     yield app
-    # As following data in quizy.data is module static it is persistent between tests execution
-    # Those should be bounded to application as well
-    quizy.data.QUIZZES = {}
-    quizy.data.QUIZZES_TAKEN = []
 
 
 @pytest.fixture(name='test_client')
