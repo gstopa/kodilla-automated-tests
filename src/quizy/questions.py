@@ -2,14 +2,11 @@ from typing import List, Set
 
 import requests.exceptions
 from requests import get
-from quizy.data_models import QuizQuestion
-
-
-POSSIBLE_DIFFICULTIES: Set[str] = {'easy', 'medium', 'hard'}
+from quizy.data_models import DIFFICULTIES, QuizQuestion
 
 
 def generate_questions(difficulty: str) -> List[QuizQuestion]:
-    if difficulty not in POSSIBLE_DIFFICULTIES:
+    if difficulty not in DIFFICULTIES:
         raise ValueError
     try:
         response = get(f'https://opentdb.com/api.php?amount=10&difficulty={difficulty}&type=boolean')

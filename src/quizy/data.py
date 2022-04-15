@@ -4,14 +4,7 @@ from uuid import uuid4
 
 from flask import Flask
 
-from quizy.data_models import QuizQuestion, QuizResult, QuizTest
-
-
-POINTS_MULTIPLIER: Dict[str, int] = {
-    'easy': 1,
-    'medium': 3,
-    'hard': 6,
-}
+from quizy.data_models import POINTS_MULTIPLIER, QuizQuestion, QuizResult, QuizTest
 
 
 @dataclass

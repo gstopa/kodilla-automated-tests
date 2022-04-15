@@ -1,5 +1,13 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Set
+
+
+POINTS_MULTIPLIER: Dict[str, int] = {
+    'easy': 1,
+    'medium': 3,
+    'hard': 6,
+}
+DIFFICULTIES: Set[str] = set(POINTS_MULTIPLIER.keys())
 
 
 @dataclass
