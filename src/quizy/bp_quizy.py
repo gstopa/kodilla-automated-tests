@@ -1,5 +1,7 @@
 from flask import Blueprint, current_app, redirect, render_template, request, session, url_for
 from flask_user import current_user
+
+from quizy.app_data import get_quizy_data
 from quizy.questions import generate_questions
 
 
@@ -20,14 +22,14 @@ def create_page():
         questions = generate_questions(difficulty=difficulty)
     except ValueError:
         return redirect(url_for('quizy.choose_page'))
-    quiz_uuid = current_app.config['QuizyData'].create_new_quiz(difficulty=request.form['difficulty'], questions=questions)
+    quiz_uuid = get_quizy_data().create_new_quiz(difficulty=request.form['difficulty'], questions=questions)
     return redirect(url_for('quizy.take_page', uuid=quiz_uuid))
 
 
 @bp_quizy.route('/take/<uuid>')
 # @login_required
 def take_page(uuid: str):
-    quiz_questions = current_app.config['QuizyData'].get_quiz_questions(uuid)
+    quiz_questions = get_quizy_data().get_quiz_questions(uuid)
     if not quiz_questions:
         return redirect(url_for('quizy.choose_page'))
     session['quiz_uuid'] = uuid
@@ -38,7 +40,8 @@ def take_page(uuid: str):
 # @login_required
 def count_me_in_page():
     quiz_uuid = session.pop('quiz_uuid')
-    score = current_app.config['QuizyData'].calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
+    quizy_data = get_quizy_data()
+    score = quizy_data.calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
     user_id = current_user.id if current_user.is_authenticated else 666
-    current_app.config['QuizyData'].add_score_to_ranking(quiz_uuid=quiz_uuid, user_id=user_id, score=score)
+    quizy_data.add_score_to_ranking(quiz_uuid=quiz_uuid, user_id=user_id, score=score)
     return render_template('count_me_in.html', score=score, uuid=quiz_uuid)

@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional
 from uuid import uuid4
 
-from flask import Flask
-
 from quizy.data_models import POINTS_MULTIPLIER, QuizQuestion, QuizResult, QuizTest
 
 
@@ -43,7 +41,3 @@ class QuizyData:
         if quiz_uuid in self.quizzes:
             return self.quizzes[quiz_uuid].questions
         return None
-
-
-def init_app(app: Flask) -> None:
-    app.config['QuizyData'] = QuizyData(quizzes={}, quizzes_taken=[])

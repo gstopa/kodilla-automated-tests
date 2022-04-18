@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, UserMixin
 from quizy.bp_quizy import bp_quizy
 from quizy.bp_ranking import bp_ranking
-from quizy.data import init_app
+from quizy.app_data import init_app_quizy_data
 
 
 class ConfigClass(object):
@@ -41,6 +41,6 @@ def create_app() -> Flask:
     app.register_blueprint(bp_quizy)
     app.register_blueprint(bp_ranking)
 
-    init_app(app)
+    init_app_quizy_data(app=app)
 
     return app
