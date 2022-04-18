@@ -1,4 +1,4 @@
-from fixtures.app import app, test_client
+from fixtures.app import app, test_client, test_client_logged_in
 from fixtures.questions_easy import (
     easy_questions_json,
     easy_quiz_answers_all_correct,
