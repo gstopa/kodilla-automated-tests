@@ -39,9 +39,9 @@ class QuizyData:
         self.quizzes[quiz_uuid] = QuizTest(uuid=quiz_uuid, difficulty=difficulty, questions=quiz_questions)
         return quiz_uuid
 
-    def get_quiz_questions(self, uuid: str) -> Optional[Dict[str, QuizQuestion]]:
-        if uuid in self.quizzes:
-            return self.quizzes[uuid].questions
+    def get_quiz_questions(self, quiz_uuid: str) -> Optional[Dict[str, QuizQuestion]]:
+        if quiz_uuid in self.quizzes:
+            return self.quizzes[quiz_uuid].questions
         return None
 
 

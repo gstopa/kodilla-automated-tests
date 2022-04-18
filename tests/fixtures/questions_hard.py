@@ -106,3 +106,51 @@ def hard_quiz_questions() -> List[QuizQuestion]:
         QuizQuestion(question='The song Scatman&#039;s World was released after Scatman (Ski-Ba-Bop-Ba-Dop-Bop).', correct_answer='True'),
         QuizQuestion(question='Only one country in the world starts with the letter Q.', correct_answer='True'),
     ]
+
+
+@pytest.fixture
+def hard_quiz_answers_all_correct() -> Dict[str, str]:
+    return {
+        '0': 'True',
+        '1': 'False',
+        '2': 'True',
+        '3': 'False',
+        '4': 'True',
+        '5': 'True',
+        '6': 'False',
+        '7': 'True',
+        '8': 'True',
+        '9': 'True',
+    }
+
+
+@pytest.fixture
+def hard_quiz_answers_all_incorrect() -> Dict[str, str]:
+    return {
+        '0': 'False',
+        '1': 'True',
+        '2': 'False',
+        '3': 'True',
+        '4': 'False',
+        '5': 'False',
+        '6': 'True',
+        '7': 'False',
+        '8': 'False',
+        '9': 'False',
+    }
+
+
+@pytest.fixture
+def hard_quiz_answers_five_correct() -> Dict[str, str]:
+    return {
+        '0': 'False',
+        '1': 'True',
+        '2': 'False',
+        '3': 'True',
+        '4': 'False',
+        '5': 'True',
+        '6': 'False',
+        '7': 'True',
+        '8': 'True',
+        '9': 'True',
+    }

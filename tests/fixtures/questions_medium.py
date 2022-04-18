@@ -106,3 +106,51 @@ def medium_quiz_questions() -> List[QuizQuestion]:
         QuizQuestion(question='&quot;Return to Castle Wolfenstein&quot; was the only game of the Wolfenstein series where you don&#039;t play as William &quot;B.J.&quot; Blazkowicz.', correct_answer='False'),
         QuizQuestion(question='ATP tennis hosted several tournaments on carpet court before being replaced to reduce injuries.', correct_answer='True'),
     ]
+
+
+@pytest.fixture
+def medium_quiz_answers_all_correct() -> Dict[str, str]:
+    return {
+        '0': 'False',
+        '1': 'True',
+        '2': 'True',
+        '3': 'False',
+        '4': 'False',
+        '5': 'True',
+        '6': 'True',
+        '7': 'False',
+        '8': 'False',
+        '9': 'True',
+    }
+
+
+@pytest.fixture
+def medium_quiz_answers_all_incorrect() -> Dict[str, str]:
+    return {
+        '0': 'True',
+        '1': 'False',
+        '2': 'False',
+        '3': 'True',
+        '4': 'True',
+        '5': 'False',
+        '6': 'False',
+        '7': 'True',
+        '8': 'True',
+        '9': 'False',
+    }
+
+
+@pytest.fixture
+def medium_quiz_answers_five_correct() -> Dict[str, str]:
+    return {
+        '0': 'True',
+        '1': 'False',
+        '2': 'False',
+        '3': 'True',
+        '4': 'True',
+        '5': 'True',
+        '6': 'True',
+        '7': 'False',
+        '8': 'False',
+        '9': 'True',
+    }
