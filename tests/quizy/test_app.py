@@ -1,3 +1,4 @@
+from unittest.mock import patch
 import pytest
 from flask import Flask
 from flask.testing import FlaskClient
@@ -43,7 +44,9 @@ def test_quizy_choose_page_is_presented(test_client) -> None:
     assert "Choose wisely!" in response.text
 
 
-def test_quizy_create_page_redirects_to_quizy_take(test_client) -> None:
+@patch('quizy.bp_quizy.generate_questions')
+def test_quizy_create_page_redirects_to_quizy_take(generate_questions_mock, test_client, easy_quiz_questions) -> None:
+    generate_questions_mock.return_value = easy_quiz_questions
     response = test_client.post('/quizy/create', data={'difficulty': 'easy'})
     assert response.status_code == 302
     assert response.location.startswith('/quizy/take/')
