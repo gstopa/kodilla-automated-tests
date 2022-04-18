@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, redirect, render_template, request, session, url_for
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from flask_user import current_user
 
 from quizy.app_data import get_quizy_data
@@ -20,7 +20,7 @@ def create_page():
     difficulty = request.form.get('difficulty')
     try:
         questions = generate_questions(difficulty=difficulty)
-    except ValueError:
+    except (ConnectionError, ValueError):
         return redirect(url_for('quizy.choose_page'))
     quiz_uuid = get_quizy_data().create_new_quiz(difficulty=request.form['difficulty'], questions=questions)
     return redirect(url_for('quizy.take_page', uuid=quiz_uuid))
@@ -41,7 +41,11 @@ def take_page(uuid: str):
 def count_me_in_page():
     quiz_uuid = session.pop('quiz_uuid')
     quizy_data = get_quizy_data()
+    print(quizy_data)
+    print(quizy_data.calculate_quiz_score)
+    print(quizy_data.calculate_quiz_score.return_value)
     score = quizy_data.calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
+    print(score)
     user_id = current_user.id if current_user.is_authenticated else 666
     quizy_data.add_score_to_ranking(quiz_uuid=quiz_uuid, user_id=user_id, score=score)
     return render_template('count_me_in.html', score=score, uuid=quiz_uuid)

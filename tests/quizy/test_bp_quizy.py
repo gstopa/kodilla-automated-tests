@@ -1,42 +1,91 @@
-from unittest.mock import patch
+from typing import List
+from unittest.mock import patch, MagicMock
+
+from flask.testing import FlaskClient
+
+from quizy.data_models import QuizQuestion
 
 
-def test_quizy_choose_page_is_presented(test_client) -> None:
+def test_quizy_choose_page_is_presented(test_client: FlaskClient) -> None:
     response = test_client.get('/quizy/choose')
     assert response.status_code == 200
-    assert "Choose wisely!" in response.text
+    assert 'Choose wisely!' in response.text
 
 
+@patch('quizy.data.QuizyData.create_new_quiz')
 @patch('quizy.bp_quizy.generate_questions')
-def test_quizy_create_page_redirects_to_quizy_take(generate_questions_mock, test_client, easy_quiz_questions) -> None:
+def test_quizy_create_page_redirects_to_quizy_take(
+        generate_questions_mock: MagicMock,
+        create_new_quiz_mock: MagicMock,
+        test_client: FlaskClient,
+        easy_quiz_questions: List[QuizQuestion],
+) -> None:
     generate_questions_mock.return_value = easy_quiz_questions
+    create_new_quiz_mock.return_value = '12345678-abcd-effe-dcba-876543210099'
     response = test_client.post('/quizy/create', data={'difficulty': 'easy'})
     assert response.status_code == 302
     assert response.location.startswith('/quizy/take/')
-    response = test_client.get(response.location)
-    assert response.status_code == 200
-    assert "You chose wisely" in response.text
 
 
-def test_quizy_create_page_redirects_to_quizy_choose_when_difficulty_is_wrong(test_client) -> None:
+@patch('quizy.bp_quizy.generate_questions')
+def test_quizy_create_page_redirects_to_quizy_choose_when_difficulty_is_wrong(
+        generate_questions_mock: MagicMock,
+        test_client: FlaskClient,
+) -> None:
+    generate_questions_mock.side_effect = [ValueError]
     response = test_client.post('/quizy/create', data={'difficulty': 'costam'})
     assert response.status_code == 302
     assert response.location.startswith('/quizy/choose')
 
 
-def test_quizy_take_page_redirects_to_quizy_choose_when_uuid_does_not_exist(test_client) -> None:
+@patch('quizy.bp_quizy.generate_questions')
+def test_quizy_create_page_redirects_to_quizy_choose_when_opentdb_not_accessible(
+        generate_questions_mock: MagicMock,
+        test_client: FlaskClient,
+) -> None:
+    generate_questions_mock.side_effect = [ConnectionError]
+    response = test_client.post('/quizy/create', data={'difficulty': 'easy'})
+    assert response.status_code == 302
+    assert response.location.startswith('/quizy/choose')
+
+
+@patch('quizy.data.QuizyData.get_quiz_questions')
+def test_quizy_take_page_redirects_to_quizy_choose_when_uuid_does_not_exist(
+        get_quiz_questions_mock: MagicMock,
+        test_client: FlaskClient,
+) -> None:
+    get_quiz_questions_mock.return_value = None
     response = test_client.get('/quizy/take/6af48814-8ef6-45fd-b73f-doesnotexist')
     assert response.status_code == 302
     assert response.location.startswith('/quizy/choose')
 
 
-def test_quizy_count_me_in_is_presented(test_client) -> None:
-    response = test_client.post('/quizy/create', data={'difficulty': 'easy'})
-    test_client.get(response.location)
+@patch('quizy.data.QuizyData.get_quiz_questions')
+def test_quizy_take_page_is_presented(
+        get_quiz_questions_mock: MagicMock,
+        test_client: FlaskClient,
+        easy_quiz_questions: List[QuizQuestion],
+) -> None:
+    get_quiz_questions_mock.return_value = {
+        str(index): question
+        for index, question in enumerate(easy_quiz_questions)
+    }
+    response = test_client.get(f'/quizy/take/12345678-abcd-effe-dcba-876543210099')
+    assert response.status_code == 200
+    assert 'You chose wisely' in response.text
+
+
+@patch('quizy.data.QuizyData.calculate_quiz_score')
+def test_quizy_count_me_in_is_presented(calculate_quiz_score_mock: MagicMock, test_client: FlaskClient) -> None:
+    uuid = '12345678-abcd-effe-dcba-876543210099'
+    calculate_quiz_score_mock.return_value = 6
     answers = {
         str(index): 'True'
         for index in range(10)
     }
-    response = test_client.post('/quizy/count_me_in', data=answers)
+    with test_client.session_transaction() as session:
+        session['quiz_uuid'] = uuid
+    with patch('quizy.data.QuizyData.add_score_to_ranking'):
+        response = test_client.post('/quizy/count_me_in', data=answers)
     assert response.status_code == 200
-    assert "So you have scored" in response.text
+    assert f'So you have scored 6 points in quiz {uuid}' in response.text
