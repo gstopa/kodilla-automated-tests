@@ -37,11 +37,14 @@ def take_page(uuid: str):
 
 
 @bp_quizy.route('/count_me_in', methods=['POST'])
+@bp_quizy.route('/count_me_in/<uuid>/<score>', methods=['GET'])
 @login_required
-def count_me_in_page():
-    quiz_uuid = session.pop('quiz_uuid')
-    quizy_data = get_quizy_data()
-    score = quizy_data.calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
-    user_id = current_user.id
-    quizy_data.add_score_to_ranking(quiz_uuid=quiz_uuid, user_id=user_id, score=score)
-    return render_template('count_me_in.html', score=score, uuid=quiz_uuid)
+def count_me_in_page(uuid: str = None, score: int = None):
+    if request.method == 'POST':
+        quiz_uuid = session.pop('quiz_uuid')
+        quizy_data = get_quizy_data()
+        quiz_score = quizy_data.calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
+        user_id = current_user.id
+        quizy_data.add_score_to_ranking(quiz_uuid=quiz_uuid, user_id=user_id, score=quiz_score)
+        return redirect(url_for('quizy.count_me_in_page', _method='GET', uuid=quiz_uuid, score=quiz_score))
+    return render_template('count_me_in.html', score=score, uuid=uuid)

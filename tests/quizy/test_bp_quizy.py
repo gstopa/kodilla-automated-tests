@@ -104,7 +104,7 @@ def test_quizy_count_me_in_page_redirects_to_sign_in_when_not_logged_in(test_cli
 
 
 @patch('quizy.data.QuizyData.calculate_quiz_score')
-def test_quizy_count_me_in_page_is_presented(
+def test_quizy_count_me_in_page_post_redirects_to_get(
         calculate_quiz_score_mock: MagicMock,
         test_client_logged_in: FlaskClient,
 ) -> None:
@@ -118,5 +118,12 @@ def test_quizy_count_me_in_page_is_presented(
         session['quiz_uuid'] = uuid
     with patch('quizy.data.QuizyData.add_score_to_ranking'):
         response = test_client_logged_in.post('/quizy/count_me_in', data=answers)
+    assert response.status_code == 302
+    assert response.location.startswith(f'/quizy/count_me_in/{uuid}/6')
+
+
+def test_quizy_count_me_in_page_is_presented(test_client_logged_in: FlaskClient) -> None:
+    uuid = '12345678-abcd-effe-dcba-876543210099'
+    response = test_client_logged_in.get(f'/quizy/count_me_in/{uuid}/6')
     assert response.status_code == 200
     assert f'So you have scored 6 points in quiz {uuid}' in response.text
