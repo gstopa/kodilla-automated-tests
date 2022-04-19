@@ -85,7 +85,7 @@ def test_quizy_create_page_redirects_to_quizy_choose_when_difficulty_is_wrong(
 
 
 @patch('quizy.bp_quizy.generate_questions')
-def test_quizy_create_page_redirects_to_quizy_choose_when_opentdb_not_accessible(
+def test_quizy_create_page_redirects_to_error_opentdb_when_opentdb_not_accessible(
         generate_questions_mock: MagicMock,
         test_client_logged_in: FlaskClient,
 ) -> None:
