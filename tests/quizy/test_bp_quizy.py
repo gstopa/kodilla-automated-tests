@@ -6,7 +6,7 @@ from flask import Flask
 from flask.testing import FlaskClient
 
 from quizy.data import QuizyData
-from quizy.data_models import QuizQuestion, QuizTest, QuizResult
+from quizy.data_models import QuizQuestion, QuizTest
 
 
 @pytest.fixture(name='quizzes')
