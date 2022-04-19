@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, UserMixin
+
+from quizy.bp_error import bp_error
 from quizy.bp_quizy import bp_quizy
 from quizy.bp_ranking import bp_ranking
 from quizy.app_data import init_app_quizy_data
@@ -40,6 +42,7 @@ def create_app() -> Flask:
 
     app.register_blueprint(bp_quizy)
     app.register_blueprint(bp_ranking)
+    app.register_blueprint(bp_error)
 
     init_app_quizy_data(app=app)
 

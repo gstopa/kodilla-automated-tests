@@ -58,7 +58,7 @@ def test_quizy_create_page_redirects_to_quizy_choose_when_opentdb_not_accessible
     generate_questions_mock.side_effect = [ConnectionError]
     response = test_client_logged_in.post('/quizy/create', data={'difficulty': 'easy'})
     assert response.status_code == 302
-    assert response.location.startswith('/quizy/choose')
+    assert response.location.startswith('/error/opentdb')
 
 
 def test_quizy_take_page_redirects_to_sign_in_when_not_logged_in(test_client: FlaskClient) -> None:

@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for
+from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from flask_user import current_user, login_required
 
 from quizy.app_data import get_quizy_data
@@ -20,8 +20,11 @@ def create_page():
     difficulty = request.form.get('difficulty')
     try:
         questions = generate_questions(difficulty=difficulty)
-    except (ConnectionError, ValueError):
+    except ValueError:
+        flash('Difficulty was wrong. Choose from below options.')
         return redirect(url_for('quizy.choose_page'))
+    except ConnectionError:
+        return redirect(url_for('error.opentdb_page'))
     quiz_uuid = get_quizy_data().create_new_quiz(difficulty=request.form['difficulty'], questions=questions)
     return redirect(url_for('quizy.take_page', uuid=quiz_uuid))
 
