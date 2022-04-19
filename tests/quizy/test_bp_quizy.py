@@ -99,7 +99,7 @@ def test_quizy_take_page_redirects_to_sign_in_when_not_logged_in(
         test_client: FlaskClient,
         quizzes: Dict[str, QuizTest],
 ) -> None:
-    uuid = list(quizzes.keys())[-1]
+    uuid = list(quizzes.keys())[0]
     response = test_client.get(f'/quizy/take/{uuid}')
     assert response.status_code == 302
     assert response.location.startswith('/user/sign-in')
@@ -115,9 +115,10 @@ def test_quizy_take_page_redirects_to_quizy_choose_when_uuid_does_not_exist(
 
 
 def test_quizy_take_page_is_presented(test_client_logged_in: FlaskClient, quizzes: Dict[str, QuizTest]) -> None:
-    response = test_client_logged_in.get(f'/quizy/take/12345678-abcd-effe-dcba-876543210099')
+    uuid = list(quizzes.keys())[0]
+    response = test_client_logged_in.get(f'/quizy/take/{uuid}')
     assert response.status_code == 200
-    assert 'You chose wisely' in response.text
+    assert f'<input id="quiz_uuid" name="quiz_uuid" type="hidden" value="{uuid}">' in response.text
 
 
 def test_quizy_count_me_in_page_redirects_to_sign_in_when_not_logged_in(
@@ -135,8 +136,7 @@ def test_quizy_count_me_in_page_post_redirects_to_get(
         easy_quiz_answers_all_correct: Dict[str, str],
 ) -> None:
     uuid = '12345678-abcd-effe-dcba-876543210099'
-    with test_client_logged_in.session_transaction() as session:
-        session['quiz_uuid'] = uuid
+    easy_quiz_answers_all_correct.update(quiz_uuid=uuid)
     response = test_client_logged_in.post('/quizy/count_me_in', data=easy_quiz_answers_all_correct)
     assert response.status_code == 302
     assert response.location.startswith(f'/quizy/count_me_in/{uuid}/10')

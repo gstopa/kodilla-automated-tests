@@ -6,6 +6,7 @@
     <h2>You chose wisely {{ difficulty }}!</h2>
     <form action="{{ url_for('quizy.count_me_in_page') }}" method="post">
         <ul>
+            <input id="quiz_uuid" name="quiz_uuid" type="hidden" value="{{ quiz_uuid }}">
         {% for key, value in quiz.items() %}
             <li>
                 <p>{{ value.question }}</p>

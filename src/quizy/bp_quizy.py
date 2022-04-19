@@ -35,8 +35,7 @@ def take_page(uuid: str):
     quiz_questions = get_quizy_data().get_quiz_questions(uuid)
     if not quiz_questions:
         return redirect(url_for('quizy.choose_page'))
-    session['quiz_uuid'] = uuid
-    return render_template('take.html', quiz=quiz_questions)
+    return render_template('take.html', quiz_uuid=uuid, quiz=quiz_questions)
 
 
 @bp_quizy.route('/count_me_in', methods=['POST'])
@@ -44,7 +43,8 @@ def take_page(uuid: str):
 @login_required
 def count_me_in_page(uuid: str = None, score: int = None):
     if request.method == 'POST':
-        quiz_uuid = session.pop('quiz_uuid')
+        answers = dict(request.form)
+        quiz_uuid = answers.pop('quiz_uuid')
         quizy_data = get_quizy_data()
         quiz_score = quizy_data.calculate_quiz_score(quiz_uuid=quiz_uuid, answers=request.form)
         user_id = current_user.id
