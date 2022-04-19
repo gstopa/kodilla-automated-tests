@@ -1,27 +1,35 @@
 from unittest.mock import patch, MagicMock
 
+import pytest
+from flask import Flask
 from flask.testing import FlaskClient
 
+from quizy.data import QuizyData
 from quizy.data_models import QuizResult
 
 
-@patch('quizy.data.QuizyData.get_ranking')
-def test_ranking_show_page_is_presented(get_ranking_mock: MagicMock, test_client: FlaskClient) -> None:
-    get_ranking_mock.return_value = []
-    response = test_client.get('/ranking/show')
-    assert response.status_code == 200
-    assert "This is the quizzes ranking!" in response.text
-
-
-@patch('quizy.data.QuizyData.get_ranking')
-def test_non_empty_ranking(get_ranking_mock: MagicMock, test_client: FlaskClient) -> None:
-    ranking = [
+@pytest.fixture(name='test_client_with_ranking')
+def fixture_test_client_with_ranking(app: Flask) -> FlaskClient:
+    quizzes_taken = [
+        QuizResult(uuid='12345678-abcd-effe-dcba-876543219009', user_id=666, score=10),
         QuizResult(uuid='12345678-abcd-effe-dcba-876543210099', user_id=666, score=60),
         QuizResult(uuid='12345678-abcd-effe-dcba-876543210909', user_id=666, score=30),
-        QuizResult(uuid='12345678-abcd-effe-dcba-876543219009', user_id=666, score=10),
     ]
-    get_ranking_mock.return_value = ranking
-    response = test_client.get('/ranking/json')
+    app.config['QuizyData'] = QuizyData(quizzes={}, quizzes_taken=quizzes_taken)
+    return app.test_client()
+
+
+def test_ranking_show_page_is_presented(test_client_with_ranking: FlaskClient) -> None:
+    response = test_client_with_ranking.get('/ranking/show')
+    assert response.status_code == 200
+    assert 'This is the quizzes ranking!' in response.text
+    assert '12345678-abcd-effe-dcba-876543219009' in response.text
+    assert '12345678-abcd-effe-dcba-876543210099' in response.text
+    assert '12345678-abcd-effe-dcba-876543210909' in response.text
+
+
+def test_non_empty_ranking(test_client_with_ranking: FlaskClient) -> None:
+    response = test_client_with_ranking.get('/ranking/json')
     assert response.status_code == 200
     assert response.is_json
     assert 'ranking' in response.json
