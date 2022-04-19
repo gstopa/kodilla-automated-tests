@@ -5,7 +5,7 @@
 {% endif %}
     <h2>Those are the quizzes!</h2>
     <ul>
-        <li><a href="/ranking/show">Ranking</a></li>
-        <li><a href="/quizy/choose">Test yourself!</a></li>
+        <li><a href="{{ url_for('ranking.show_page') }}">Ranking</a></li>
+        <li><a href="{{ url_for('quizy.choose_page') }}">Test yourself!</a></li>
     </ul>
 {% endblock %}

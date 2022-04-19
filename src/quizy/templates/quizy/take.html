@@ -4,7 +4,7 @@
     <h1>Hello {{ current_user.username }}!</h1>
 {% endif %}
     <h2>You chose wisely {{ difficulty }}!</h2>
-    <form action="/quizy/count_me_in" method="post">
+    <form action="{{ url_for('quizy.count_me_in_page') }}" method="post">
         <ul>
         {% for key, value in quiz.items() %}
             <li>
