@@ -14,15 +14,6 @@ def test_ranking_show_page_is_presented(get_ranking_mock: MagicMock, test_client
 
 
 @patch('quizy.data.QuizyData.get_ranking')
-def test_ranking_json_page_is_presented(get_ranking_mock: MagicMock, test_client: FlaskClient) -> None:
-    get_ranking_mock.return_value = []
-    response = test_client.get('/ranking/json')
-    assert response.status_code == 200
-    assert response.is_json
-    assert 'ranking' in response.json
-
-
-@patch('quizy.data.QuizyData.get_ranking')
 def test_non_empty_ranking(get_ranking_mock: MagicMock, test_client: FlaskClient) -> None:
     ranking = [
         QuizResult(uuid='12345678-abcd-effe-dcba-876543210099', user_id=666, score=60),
@@ -34,6 +25,7 @@ def test_non_empty_ranking(get_ranking_mock: MagicMock, test_client: FlaskClient
     assert response.status_code == 200
     assert response.is_json
     assert 'ranking' in response.json
+    assert len(response.json['ranking']) == 3
     assert response.json['ranking'][0]['uuid'] == '12345678-abcd-effe-dcba-876543210099'
     assert response.json['ranking'][1]['uuid'] == '12345678-abcd-effe-dcba-876543210909'
     assert response.json['ranking'][2]['uuid'] == '12345678-abcd-effe-dcba-876543219009'
