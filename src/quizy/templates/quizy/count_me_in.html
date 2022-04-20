@@ -1,0 +1,10 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+{% if current_user.username %}
+    <h1>Hello {{ current_user.username }}!</h1>
+{% endif %}
+    <h2>You chose!</h2>
+    <p>So you have scored {{ score }} points in quiz {{ uuid }}!</p>
+    <p><a href="{{ url_for('quizy.choose_page') }}">Take another quiz...</a></p>
+    <p><a href="{{ url_for('ranking.show_page') }}">Or check the ranking!</a></p>
+{% endblock %}

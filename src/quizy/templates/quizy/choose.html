@@ -1,0 +1,16 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+{% if current_user.username %}
+    <h1>Hello {{ current_user.username }}!</h1>
+{% endif %}
+    <h2>Choose wisely!</h2>
+{% with messages = get_flashed_messages() %}
+    <h3>{{ messages[-1] }}</h3>
+{% endwith %}
+    <form action="{{ url_for('quizy.create_page') }}" method="post">
+        <input type="radio" id="easy" name="difficulty" value="easy"><label for="easy">easy</label><br>
+        <input type="radio" id="medium" name="difficulty" value="medium"><label for="medium">medium</label><br>
+        <input type="radio" id="hard" name="difficulty" value="hard"><label for="hard">hard</label><br>
+        <input type="submit" value="Go for it!">
+    </form>
+{% endblock %}

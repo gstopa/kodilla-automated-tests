@@ -1,0 +1,13 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+{% if current_user.username %}
+    <h1>Hello {{ current_user.username }}!</h1>
+{% endif %}
+    <h2>Open Trivia Database is not accessible at the moment!</h2>
+    <h2>Please try again later!</h2>
+    <ul>
+        <li><a href="{{ url_for('index_page') }}">Home</a></li>
+        <li><a href="{{ url_for('ranking.show_page') }}">Ranking</a></li>
+        <li><a href="{{ url_for('quizy.choose_page') }}">Test yourself!</a></li>
+    </ul>
+{% endblock %}
