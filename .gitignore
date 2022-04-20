@@ -1,6 +1,7 @@
 .activate
 .coverage
 .idea
+.tox
 build/
 __pycache__/
 **.egg-info
